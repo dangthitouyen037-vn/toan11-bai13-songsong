@@ -1,0 +1,3460 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 13: Hai mặt phẳng song song — duonghoacuong.edu.vn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --teal: #0d7a72;
+      --teal-dark: #0a5e58;
+      --teal-light: #e6f4f1;
+      --teal-border: #7fd4cb;
+      --pink: #e11d48;
+      --pink-bg: #fff1f2;
+      --pink-border: #fda4af;
+      --blue: #2563eb;
+      --orange: #ea580c;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    @media (min-width: 1024px) {
+      body { height: 100vh; overflow: hidden; }
+    }
+    .math {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-style: italic;
+      font-size: 1.05em;
+    }
+    .math-rm {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-style: normal;
+      font-size: 1.02em;
+    }
+
+    /* Header & Stepper */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px 10px;
+      flex-shrink: 0;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-lesson {
+      background: var(--teal);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 6px 12px;
+      border-radius: 9px;
+      white-space: nowrap;
+    }
+    .header-title h1 {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text);
+    }
+    .header-title p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .domain-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      border: 1px solid var(--teal-border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .domain-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    nav.stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .step-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .step-btn:hover {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+    .step-btn .num {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      border: 1.5px solid var(--teal-border);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .step-btn.active {
+      background: var(--teal-light);
+      border-color: var(--teal-border);
+      color: var(--text);
+      font-weight: 700;
+    }
+    .step-btn.active .num {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
+
+    /* Main Layout */
+    main {
+      flex: 1;
+      padding: 14px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .section {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+    .section.active {
+      display: flex;
+    }
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .sec-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      text-transform: uppercase;
+    }
+    .sec-head h2 {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .sec-desc {
+      font-size: 13.5px;
+      color: #334155;
+      margin-bottom: 10px;
+      line-height: 1.45;
+      flex-shrink: 0;
+    }
+
+    .grid-2 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 14px;
+      min-height: 0;
+    }
+    .grid-3 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      min-height: 0;
+    }
+    .grid-summary-top {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .grid-summary-bottom {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 14px;
+      min-height: 0;
+    }
+    @media (max-width: 1023px) {
+      .grid-2, .grid-3, .grid-summary-top, .grid-summary-bottom {
+        grid-template-columns: 1fr;
+      }
+      .canvas-box { min-height: 300px; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .scroll-y {
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .scroll-y::-webkit-scrollbar { width: 6px; }
+    .scroll-y::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+
+    /* Subtabs & Canvas */
+    .subtabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .subtab {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .subtab.active {
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      border-color: var(--teal-border);
+    }
+
+    .canvas-box {
+      flex: 1;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background-color: #ffffff;
+      background-image:
+        linear-gradient(to right, #f1f5f9 1px, transparent 1px),
+        linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+      background-size: 24px 24px;
+      position: relative;
+      overflow: hidden;
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .canvas-box canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      touch-action: none;
+    }
+    .canvas-box canvas:active { cursor: grabbing; }
+    .canvas-top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+    .canvas-top-left {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+    }
+    .pill-tag {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .pill-status {
+      background: var(--teal-light);
+      border: 1px solid var(--teal-border);
+      color: var(--teal-dark);
+      border-radius: 999px;
+      padding: 4px 11px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .pill-status.warn {
+      background: var(--pink-bg);
+      border-color: var(--pink-border);
+      color: var(--pink);
+    }
+    .pill-btn {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .pill-btn:hover { background: #f1f5f9; }
+
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .control-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: #334155;
+      font-weight: 500;
+    }
+    .control-group input[type="range"] {
+      accent-color: var(--teal);
+      width: 96px;
+      cursor: pointer;
+    }
+    .control-group input[type="checkbox"] {
+      accent-color: var(--teal);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .mode-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .mode-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.15s;
+    }
+    .mode-btn.active {
+      background: var(--teal-light);
+      border-color: var(--teal);
+      color: var(--teal-dark);
+      font-weight: 700;
+    }
+
+    /* Draw step controls */
+    .draw-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .draw-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .dots { display: flex; align-items: center; gap: 5px; }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      transition: 0.15s;
+    }
+    .dot.active { background: var(--teal); transform: scale(1.15); }
+    .legend-line {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    /* Right Panel Blocks */
+    .box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      background: #ffffff;
+    }
+    .box-muted {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .box-badge {
+      display: inline-block;
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      margin-right: 6px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      line-height: 1.48;
+      opacity: 0.35;
+      transition: all 0.2s ease;
+      background: #ffffff;
+    }
+    .step-item.active {
+      opacity: 1;
+      background: var(--teal-light);
+      border-color: var(--teal-border);
+    }
+    .step-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1.5px solid #cbd5e1;
+      display: grid;
+      place-items: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .step-item.active .step-circle {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
+
+    .btn-row { display: flex; gap: 8px; margin: 8px 0 12px; flex-wrap: wrap; }
+    .btn {
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .btn:hover:not(:disabled) { background: #f1f5f9; }
+    .btn-primary {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #ffffff;
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--teal-dark); }
+    .btn-danger {
+      background: var(--pink);
+      border-color: var(--pink);
+      color: #ffffff;
+    }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .theorem-box {
+      background: var(--teal-light);
+      border: 1.5px solid var(--teal);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      line-height: 1.52;
+    }
+    .theorem-box strong { color: var(--teal-dark); }
+
+    .dashed-q {
+      border: 1.5px dashed var(--pink-border);
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .q-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--pink-bg);
+      color: var(--pink);
+      font-weight: 800;
+      font-size: 12px;
+      margin-right: 6px;
+    }
+    .toggle-ans {
+      margin-top: 6px;
+      background: none;
+      border: none;
+      color: var(--teal);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      padding: 2px 0;
+    }
+    .toggle-ans:hover { text-decoration: underline; }
+    .ans-body {
+      display: none;
+      margin-top: 7px;
+      padding: 7px 10px;
+      border-left: 3px solid var(--teal-border);
+      background: #f8fafc;
+      border-radius: 0 6px 6px 0;
+      color: #334155;
+      font-size: 13px;
+    }
+    .ans-body.open { display: block; }
+
+    /* Summary Cards */
+    .sum-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .formula-big {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .kw-pill {
+      display: inline-block;
+      background: #ffffff;
+      border: 1px solid var(--teal-border);
+      color: var(--teal-dark);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    /* Quiz styles */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .form-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .form-field input {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      outline: none;
+    }
+    .form-field input:focus { border-color: var(--teal); }
+    .timer-box {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--teal-dark);
+      background: var(--teal-light);
+      border: 1px solid var(--teal-border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .timer-box.low {
+      background: var(--pink-bg);
+      border-color: var(--pink-border);
+      color: var(--pink);
+    }
+    .q-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .q-num-btn {
+      padding: 8px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .q-num-btn.answered {
+      background: var(--teal-light);
+      border-color: var(--teal-border);
+      color: var(--teal-dark);
+    }
+    .q-num-btn.current {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #ffffff;
+    }
+    .opt-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 13.5px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      transition: 0.15s;
+    }
+    .opt-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .opt-btn.selected {
+      background: var(--teal-light);
+      border-color: var(--teal);
+      color: var(--teal-dark);
+      font-weight: 600;
+    }
+    .tf-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .tf-btns { display: flex; gap: 6px; flex-shrink: 0; }
+    .tf-btn {
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tf-btn.selected {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #ffffff;
+    }
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .lb-table th, .lb-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .lb-table th { color: var(--muted); font-size: 11.5px; text-transform: uppercase; }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+    }
+    .modal-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+    .modal-card p { font-size: 13.5px; color: #475569; margin-bottom: 16px; line-height: 1.5; }
+  
+    .canvas-bottom-left {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 3;
+      max-width: calc(100% - 24px);
+    }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #16a34a;
+    }
+    .status-dot.red { background: #dc2626; }
+    .labels-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .lbl-3d {
+      position: absolute;
+      font-family: 'Times New Roman', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 15px;
+      transform: translate(-50%, -50%);
+      text-shadow: 0 0 4px rgba(255,255,255,0.95), 0 0 2px rgba(255,255,255,0.95);
+      white-space: nowrap;
+    }
+    .step-item.done {
+      opacity: 1;
+      background: #ffffff;
+      border-color: var(--border);
+    }
+    .step-item.done .step-circle {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: var(--text);
+    }
+
+    #lt1-steps .step-item { display: none; }
+    #lt1-steps .step-item.active { display: flex; }
+  
+    /* ================= RESPONSIVE MOBILE, TABLET & LAPTOP (CHỐNG ĐÈ HÌNH/CHỮ) ================= */
+    @media (min-width: 1024px) and (max-height: 760px) {
+      body { height: auto; overflow-y: auto; }
+      main { overflow: visible; }
+      .section { height: auto; }
+      .canvas-box { height: 340px; }
+    }
+
+    @media (max-width: 1023px) {
+      body { height: auto; overflow-y: auto; }
+      header { padding: 10px 14px; position: sticky; top: 0; z-index: 30; }
+      .header-top { margin-bottom: 8px; gap: 8px; }
+      .header-title h1 { font-size: 16px; }
+      .header-title p { font-size: 11.5px; }
+      .domain-pill { font-size: 11px; padding: 4px 10px; }
+
+      /* Thanh điều hướng 8 mục cuộn ngang mượt trên điện thoại, không rớt dòng chiếm màn hình */
+      nav.stepper {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      nav.stepper::-webkit-scrollbar { display: none; }
+      .step-btn { flex-shrink: 0; padding: 6px 11px; font-size: 12px; }
+
+      main { padding: 12px 12px 28px; overflow: visible; }
+      .section { height: auto; }
+      .sec-head h2 { font-size: 17px; }
+      .sec-desc { font-size: 13px; }
+
+      .grid-2, .grid-3, .grid-summary-top, .grid-summary-bottom {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .card { padding: 12px; height: auto; overflow: visible; }
+      .scroll-y { overflow-y: visible; padding-right: 0; }
+
+      /* Khung 3D cố định chiều cao hợp lý, không bị bóp méo hay đè nút */
+      .canvas-box {
+        height: 310px;
+        min-height: 280px;
+        flex: none;
+      }
+      .canvas-top-right { top: 8px; right: 8px; gap: 4px; }
+      .canvas-top-left { top: auto; bottom: 8px; left: 8px; right: 8px; }
+      .canvas-bottom-left { bottom: 8px; left: 8px; right: 8px; max-width: none; }
+      .pill-tag, .pill-btn { font-size: 11px; padding: 4px 8px; }
+      .status-chip, .pill-status { font-size: 11.5px; padding: 5px 10px; line-height: 1.35; }
+    }
+
+    @media (max-width: 639px) {
+      .canvas-box { height: 270px; min-height: 250px; }
+      .form-row { grid-template-columns: 1fr; }
+      .mode-bar { flex-direction: column; }
+      .mode-btn { width: 100%; min-width: 0; }
+      .controls-bar { gap: 8px; }
+      .control-group { font-size: 12px; }
+      .tf-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .tf-btns { width: 100%; }
+      .tf-btn { flex: 1; padding: 7px 0; }
+      .draw-controls { flex-direction: column; align-items: flex-start; }
+      .btn { min-height: 36px; }
+      .pill-tag { display: none; } /* Ẩn nhãn "Kéo để xoay" trên màn hình rất nhỏ để nhường chỗ cho nút +, -, Đặt lại */
+    }
+
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div class="header-left">
+        <span class="badge-lesson">Bài 13</span>
+        <div class="header-title">
+          <h1>Hai mặt phẳng song song</h1>
+          <p>Toán 11 · Kết nối tri thức với cuộc sống · Chương IV · Tiết 1</p>
+        </div>
+      </div>
+      <div class="domain-pill">
+        <span class="domain-dot"></span>
+        <span>duonghoacuong.edu.vn</span>
+      </div>
+    </div>
+    <nav class="stepper" id="stepper" aria-label="Tiến trình bài học">
+      <button class="step-btn" data-tab="mo-dau"><span class="num">1</span>Mở đầu</button>
+      <button class="step-btn" data-tab="dinh-nghia"><span class="num">2</span>Hai mặt phẳng song song</button>
+      <button class="step-btn active" data-tab="dieu-kien"><span class="num">3</span>Điều kiện song song</button>
+      <button class="step-btn" data-tab="vi-du-1"><span class="num">4</span>Ví dụ 1</button>
+      <button class="step-btn" data-tab="luyen-tap-1"><span class="num">5</span>Luyện tập 1</button>
+      <button class="step-btn" data-tab="van-dung-1"><span class="num">6</span>Vận dụng 1</button>
+      <button class="step-btn" data-tab="tong-ket"><span class="num">7</span>Tổng kết</button>
+      <button class="step-btn" data-tab="kiem-tra"><span class="num">8</span>Kiểm tra</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- MỤC 1: MỞ ĐẦU -->
+    <section class="section" id="mo-dau">
+      <div class="sec-head">
+        <span class="sec-tag">HOẠT ĐỘNG 1 · MỞ ĐẦU</span>
+        <h2>Đầu bếp thái thức ăn</h2>
+      </div>
+      <p class="sec-desc">Các đầu bếp chuyên nghiệp thái rau, củ, thịt, cá... thành các miếng đều nhau và đẹp mắt. Các nhát cắt cần tuân thủ nguyên tắc gì để đạt được điều đó?</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>Mô phỏng: thái khúc dưa chuột</span>
+            <span class="pill-status" id="cuc-status">Các nhát cắt song song: lát dày đều</span>
+          </div>
+          <div class="canvas-box">
+            <div class="canvas-top-right">
+              <span class="pill-tag">Kéo để xoay</span>
+              <button class="pill-btn" id="cuc-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="cuc-zoom-out" title="Thu nhỏ">−</button>
+              <button class="pill-btn" id="cuc-reset">Đặt lại góc nhìn</button>
+            </div>
+            <canvas id="canvas-cuc"></canvas>
+          </div>
+          <div class="controls-bar">
+            <button class="btn btn-primary btn-sm" id="cuc-play">▶ Thái</button>
+            <label class="control-group">Số nhát cắt: <strong id="cuc-count-val">5</strong>
+              <input type="range" id="cuc-count" min="2" max="9" value="5" />
+            </label>
+            <label class="control-group">
+              <input type="checkbox" id="cuc-skew" /> Cắt lệch (không song song)
+            </label>
+            <label class="control-group">
+              <input type="checkbox" id="cuc-planes" checked /> Hiện mặt phẳng chứa nhát cắt
+            </label>
+          </div>
+        </div>
+        <div class="card scroll-y">
+          <div class="box-muted"><strong>Suy nghĩ cá nhân 1 phút, trao đổi cặp đôi 1 phút</strong></div>
+          <div class="box">
+            <span class="box-badge">C1</span>Các nhát cắt cần tuân thủ nguyên tắc gì để các miếng đều nhau và đẹp mắt?
+            <div><button class="toggle-ans" data-toggle>+ Gợi ý trả lời</button></div>
+            <div class="ans-body">Các nhát cắt phải song song với nhau và cách đều nhau.</div>
+          </div>
+          <div class="box">
+            <span class="box-badge">C2</span>Mỗi nhát dao “quét” ra hình ảnh của đối tượng hình học nào? Hai nhát cắt liên tiếp có điểm chung không?
+            <div><button class="toggle-ans" data-toggle>+ Gợi ý trả lời</button></div>
+            <div class="ans-body">Mỗi nhát cắt tạo thành một phần của mặt phẳng. Hai nhát cắt liên tiếp không có điểm chung.</div>
+          </div>
+          <div class="box">
+            <span class="box-badge">C3</span>Làm thế nào để kiểm tra hai nhát cắt đó “song song”?
+            <div><button class="toggle-ans" data-toggle>+ Vấn đề của tiết học</button></div>
+            <div class="ans-body">Thế nào là hai mặt phẳng song song? Dựa vào đâu để khẳng định hai mặt phẳng song song?</div>
+          </div>
+          <div class="box-muted"><em>Ghi chú:</em> Thử bật “Cắt lệch”: các mặt phẳng chứa nhát cắt giao nhau, các lát không còn dày đều.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 2: HAI MẶT PHẲNG SONG SONG -->
+    <section class="section" id="dinh-nghia">
+      <div class="sec-head">
+        <span class="sec-tag">HOẠT ĐỘNG 2.1 · MỤC 1</span>
+        <h2>Hai mặt phẳng song song</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="subtabs" data-subtab-group="m2">
+            <button class="subtab active" data-target="m2-stairs">HĐ1 · Bậc thang (H.4.40)</button>
+            <button class="subtab" data-target="m2-rel">Vị trí tương đối</button>
+            <button class="subtab" data-target="m2-draw">Vẽ hình biểu diễn</button>
+          </div>
+
+          <div id="m2-stairs" class="subpanel" style="display:flex; flex-direction:column; flex:1; min-height:0;">
+            <div class="canvas-box">
+              <div class="canvas-top-right">
+                <span class="pill-tag">Kéo để xoay</span>
+                <button class="pill-btn" id="stairs-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="stairs-zoom-out" title="Thu nhỏ">−</button>
+              <button class="pill-btn" id="stairs-reset">Đặt lại góc nhìn</button>
+              </div>
+              <canvas id="canvas-stairs"></canvas>
+              <div class="labels-overlay" id="stairs-labels"></div>
+            </div>
+            <div class="controls-bar">
+              <label class="control-group">
+                <input type="checkbox" id="stairs-planes" checked /> Hiện mặt phẳng chứa mặt bậc
+              </label>
+            </div>
+          </div>
+
+          <div id="m2-rel" class="subpanel" style="display:none; flex-direction:column; flex:1; min-height:0;">
+            <div class="canvas-box">
+              <div class="canvas-top-left">
+                <span class="pill-status" id="rel-status">(α) // (β) — Không có điểm chung</span>
+              </div>
+              <div class="canvas-top-right">
+                <span class="pill-tag">Kéo để xoay</span>
+                <button class="pill-btn" id="rel-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="rel-zoom-out" title="Thu nhỏ">−</button>
+              <button class="pill-btn" id="rel-reset">Đặt lại góc nhìn</button>
+              </div>
+              <canvas id="canvas-rel"></canvas>
+              <div class="labels-overlay" id="rel-labels"></div>
+            </div>
+            <div class="controls-bar">
+              <label class="control-group">Khoảng cách:
+                <input type="range" id="rel-dist" min="0" max="100" value="65" />
+              </label>
+              <label class="control-group">Góc nghiêng của <span class="math">(β)</span>:
+                <input type="range" id="rel-angle" min="-35" max="35" value="0" />
+              </label>
+              <label class="control-group">
+                <input type="checkbox" id="rel-line-d" checked /> Đường thẳng <span class="math">d ⊂ (α)</span>
+              </label>
+              <button class="btn btn-primary btn-sm" id="rel-parallel">Đặt song song</button>
+            </div>
+          </div>
+
+          <div id="m2-draw" class="subpanel" style="display:none; flex-direction:column; flex:1; min-height:0;">
+            <div class="canvas-box">
+              <div class="canvas-top-right">
+              <button class="pill-btn" id="draw-m2-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="draw-m2-zoom-out" title="Thu nhỏ">−</button>
+            </div>
+            <canvas id="canvas-draw-m2"></canvas>
+            </div>
+            <div class="draw-controls">
+              <div class="draw-btns">
+                <button class="btn btn-sm" id="draw-m2-prev">◀ Bước trước</button>
+                <button class="btn btn-primary btn-sm" id="draw-m2-next">Vẽ bước tiếp ▶</button>
+                <button class="btn btn-sm" id="draw-m2-auto">Tự động</button>
+                <button class="btn btn-sm" id="draw-m2-reset">Vẽ lại</button>
+              </div>
+              <div class="dots" id="draw-m2-dots"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card scroll-y">
+          <div class="box">
+            <span class="box-badge">HĐ1</span>Các mặt bậc thang trong Hình 4.40 gợi nên hình ảnh về các mặt phẳng không có điểm chung. Hãy tìm thêm một số ví dụ khác cũng gợi nên hình ảnh đó.
+            <div><button class="toggle-ans" data-toggle>+ Ví dụ</button></div>
+            <div class="ans-body">Sàn và trần lớp học; các tầng kệ sách; mặt trên và mặt đáy hộp sữa; sàn các tầng nhà; ruộng bậc thang. <em>Lưu ý:</em> tháp nghiêng Pisa có mặt sàn ở mỗi tầng không song song với mặt đất; mặt tường và mặt sàn là hai mặt phẳng cắt nhau.</div>
+          </div>
+          <div class="theorem-box">
+            <strong>Định nghĩa.</strong> Hai mặt phẳng <span class="math">(α)</span> và <span class="math">(β)</span> được gọi là <strong>song song với nhau</strong> nếu chúng không có điểm chung, kí hiệu <span class="math">(α) // (β)</span> hay <span class="math">(β) // (α)</span>.
+          </div>
+          <div class="box">
+            <strong>Vị trí tương đối của hai mặt phẳng:</strong> trùng nhau · cắt nhau theo một giao tuyến · song song. <em>(Xem mô phỏng “Vị trí tương đối”.)</em>
+          </div>
+          <div class="box">
+            <strong>Nhận xét.</strong> Nếu <span class="math">(α) // (β)</span> và đường thẳng <span class="math">d</span> nằm trong <span class="math">(α)</span> thì <span class="math">d</span> và <span class="math">(β)</span> không có điểm chung, tức là <span class="math">d // (β)</span>. Như vậy, một đường thẳng nằm trong một trong hai mặt phẳng song song thì song song với mặt phẳng còn lại.
+          </div>
+          <div class="dashed-q">
+            <span class="q-mark">?</span>Trong hình ảnh mở đầu, các nhát cắt có nằm trong các mặt phẳng song song hay không?
+            <div><button class="toggle-ans" data-toggle>+ Trả lời</button></div>
+            <div class="ans-body">Có. Các nhát cắt nằm trong các mặt phẳng song song (đầu bếp giữ lưỡi dao song song với nhát cắt trước).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 3: ĐIỀU KIỆN SONG SONG (Mặc định) -->
+    <section class="section active" id="dieu-kien">
+      <div class="sec-head">
+        <span class="sec-tag">HOẠT ĐỘNG 2.2 · MỤC 2</span>
+        <h2>Điều kiện để hai mặt phẳng song song</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="subtabs" data-subtab-group="m3">
+            <button class="subtab active" data-target="m3-sim">HĐ2 · Mô phỏng 3D (H.4.41)</button>
+            <button class="subtab" data-target="m3-draw">Vẽ hình biểu diễn H.4.41</button>
+          </div>
+
+          <div id="m3-sim" class="subpanel" style="display:flex; flex-direction:column; flex:1; min-height:0;">
+            <div class="canvas-box">
+              <div class="canvas-top-right">
+                <span class="pill-tag">Kéo để xoay</span>
+                <button class="pill-btn" id="m3-zoom-in" title="Phóng to">+</button>
+                <button class="pill-btn" id="m3-zoom-out" title="Thu nhỏ">−</button>
+                <button class="pill-btn" id="m3-reset">Đặt lại góc nhìn</button>
+              </div>
+              <canvas id="canvas-m3"></canvas>
+              <div class="labels-overlay" id="m3-labels"></div>
+              <div class="canvas-bottom-left">
+                <div class="status-chip" id="m3-status-chip">
+                  <span class="status-dot" id="m3-status-dot"></span>
+                  <span id="m3-status"><span class="math">a, b</span> cắt nhau tại <span class="math">M</span>, cùng song song với <span class="math">(β) ⇒ (α) // (β)</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="mode-bar" id="m3-modes">
+              <button class="mode-btn" data-mode="0">① Giả sử (α) cắt (β)</button>
+              <button class="mode-btn active" data-mode="1">② Kết luận: (α) // (β)</button>
+              <button class="mode-btn" data-mode="2">③ Bỏ điều kiện “cắt nhau”</button>
+            </div>
+          </div>
+
+          <div id="m3-draw" class="subpanel" style="display:none; flex-direction:column; flex:1; min-height:0;">
+            <div class="canvas-box">
+              <div class="canvas-top-right">
+              <button class="pill-btn" id="draw-m3-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="draw-m3-zoom-out" title="Thu nhỏ">−</button>
+            </div>
+            <canvas id="canvas-draw-m3"></canvas>
+            </div>
+            <div class="draw-controls">
+              <div class="draw-btns">
+                <button class="btn btn-sm" id="draw-m3-prev">◀ Bước trước</button>
+                <button class="btn btn-primary btn-sm" id="draw-m3-next">Vẽ bước tiếp ▶</button>
+                <button class="btn btn-sm" id="draw-m3-auto">Tự động</button>
+                <button class="btn btn-sm" id="draw-m3-reset">Vẽ lại</button>
+              </div>
+              <div class="dots" id="draw-m3-dots"></div>
+            </div>
+            <div class="legend-line">
+              <span><strong>—</strong> nét thấy</span>
+              <span><strong>---</strong> nét khuất</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card scroll-y">
+          <div class="box">
+            <span class="box-badge">HĐ2</span>Cho mặt phẳng <span class="math">(α)</span> chứa hai đường thẳng cắt nhau <span class="math">a, b</span> và <span class="math">a, b</span> cùng song song với mặt phẳng <span class="math">(β)</span>. Nếu <span class="math">(α)</span> và <span class="math">(β)</span> cắt nhau theo giao tuyến <span class="math">c</span> thì <span class="math">a</span> và <span class="math">c</span>; <span class="math">b</span> và <span class="math">c</span> có song song với nhau hay không?
+          </div>
+
+          <div id="m3-steps">
+            <div class="step-item">
+              <span class="step-circle">1</span>
+              <div><span class="math">a ⊂ (α), a // (β), (α) ∩ (β) = c ⇒ a // c</span>. Tương tự <span class="math">b // c</span>. <em>(Tính chất ở Bài 12)</em></div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">2</span>
+              <div>Qua giao điểm <span class="math">M</span> của <span class="math">a, b</span> có hai đường thẳng cùng song song với <span class="math">c</span>: mâu thuẫn (qua một điểm ngoài <span class="math">c</span> chỉ có một đường thẳng song song với <span class="math">c</span>).</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">3</span>
+              <div>Vậy <span class="math">(α)</span> không cắt <span class="math">(β)</span>, và <span class="math">(α)</span> không trùng <span class="math">(β)</span> vì <span class="math">a // (β)</span>. Do đó <span class="math">(α) // (β)</span>.</div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" id="m3-prev-step" disabled>◀ Lùi</button>
+            <button class="btn btn-primary" id="m3-next-step">Lập luận tiếp ▶</button>
+          </div>
+
+          <div class="theorem-box">
+            <strong>Định lí.</strong> Nếu mặt phẳng <span class="math">(α)</span> chứa hai đường thẳng cắt nhau và hai đường thẳng này cùng song song với mặt phẳng <span class="math">(β)</span> thì <span class="math">(α)</span> và <span class="math">(β)</span> song song với nhau.
+          </div>
+
+          <div class="dashed-q">
+            <span class="q-mark">?</span>Nếu không có điều kiện “hai đường thẳng cắt nhau” thì khẳng định trên còn đúng không?
+            <div><button class="toggle-ans" data-toggle>+ Trả lời</button></div>
+            <div class="ans-body">Không. Xem mô phỏng ③: <span class="math">(α)</span> cắt <span class="math">(β)</span> theo <span class="math">c</span>; trong <span class="math">(α)</span> lấy <span class="math">a, b</span> phân biệt cùng song song với <span class="math">c</span>. Khi đó <span class="math">a // (β), b // (β)</span> nhưng <span class="math">(α)</span> không song song với <span class="math">(β)</span>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 4: VÍ DỤ 1 -->
+    <section class="section" id="vi-du-1">
+      <div class="sec-head">
+        <span class="sec-tag">HOẠT ĐỘNG 2.2 · VÍ DỤ 1</span>
+        <h2>Chứng minh <span class="math">(BCE) // (ADF)</span></h2>
+      </div>
+      <p class="sec-desc">Cho hai hình bình hành <span class="math">ABCD</span> và <span class="math">ABEF</span> không cùng nằm trong một mặt phẳng. Chứng minh rằng mặt phẳng <span class="math">(BCE)</span> song song với mặt phẳng <span class="math">(ADF)</span> (H.4.42).</p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">
+            <span>Mô hình 3D</span>
+            <button class="pill-btn" id="vd1-reset">Đặt lại góc nhìn</button>
+          </div>
+          <div class="canvas-box">
+            <div class="canvas-top-right">
+              <button class="pill-btn" id="vd1-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="vd1-zoom-out" title="Thu nhỏ">−</button>
+            </div>
+            <canvas id="canvas-vd1"></canvas>
+            <div class="labels-overlay" id="vd1-labels"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>Vẽ hình biểu diễn từng bước</span></div>
+          <div class="canvas-box">
+            <div class="canvas-top-right">
+              <button class="pill-btn" id="draw-vd1-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="draw-vd1-zoom-out" title="Thu nhỏ">−</button>
+            </div>
+            <canvas id="canvas-draw-vd1"></canvas>
+          </div>
+          <div class="draw-controls">
+            <div class="draw-btns">
+              <button class="btn btn-sm" id="draw-vd1-prev">◀</button>
+              <button class="btn btn-primary btn-sm" id="draw-vd1-next">Vẽ tiếp ▶</button>
+              <button class="btn btn-sm" id="draw-vd1-auto">Tự động</button>
+              <button class="btn btn-sm" id="draw-vd1-reset">Vẽ lại</button>
+            </div>
+            <div class="dots" id="draw-vd1-dots"></div>
+          </div>
+        </div>
+        <div class="card scroll-y">
+          <div class="card-title"><span>Lời giải từng bước</span></div>
+          <div class="box-muted"><em>Câu hỏi định hướng:</em> muốn chứng minh <span class="math">(BCE) // (ADF)</span>, ta cần tìm gì trong <span class="math">(BCE)</span>?</div>
+          <div id="vd1-steps">
+            <div class="step-item">
+              <span class="step-circle">1</span>
+              <div>Vì tứ giác <span class="math">ABCD</span> là hình bình hành nên <span class="math">BC // AD</span>, suy ra <span class="math">BC // (ADF)</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">2</span>
+              <div>Vì tứ giác <span class="math">ABEF</span> là hình bình hành nên <span class="math">BE // AF</span>, suy ra <span class="math">BE // (ADF)</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">3</span>
+              <div>Mặt phẳng <span class="math">(BCE)</span> chứa hai đường thẳng cắt nhau <span class="math">BC</span> và <span class="math">BE</span> cùng song song với <span class="math">(ADF)</span> nên <span class="math">(BCE) // (ADF)</span>.</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="vd1-prev-step" disabled>◀ Lùi</button>
+            <button class="btn btn-primary" id="vd1-next-step">Bước giải tiếp ▶</button>
+          </div>
+          <div class="theorem-box">
+            <strong>Quy trình chứng minh <span class="math">(α) // (β)</span>:</strong><br/>
+            B1. Chọn trong <span class="math">(α)</span> hai đường thẳng cắt nhau <span class="math">a, b</span>.<br/>
+            B2. Chứng minh <span class="math">a // (β), b // (β)</span> (thường qua <span class="math">a // a' ⊂ (β)</span>).<br/>
+            B3. Kết luận theo định lí.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 5: LUYỆN TẬP 1 -->
+    <section class="section" id="luyen-tap-1">
+      <div class="sec-head">
+        <span class="sec-tag">HOẠT ĐỘNG 3 · LUYỆN TẬP 1</span>
+        <h2>Chứng minh <span class="math-rm">mp</span><span class="math">(m, n) // (BCD)</span></h2>
+      </div>
+      <p class="sec-desc">Trong không gian, cho bốn điểm <span class="math">A, B, C, D</span> không đồng phẳng. Qua điểm <span class="math">A</span> vẽ hai đường thẳng <span class="math">m, n</span> lần lượt song song với hai đường thẳng <span class="math">BC, BD</span>. Chứng minh rằng <span class="math-rm">mp</span><span class="math">(m, n)</span> song song với mặt phẳng <span class="math">(BCD)</span>.</p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">
+            <span>Mô hình 3D</span>
+            <button class="pill-btn" id="lt1-reset">Đặt lại góc nhìn</button>
+          </div>
+          <div class="canvas-box">
+            <div class="canvas-top-right">
+              <button class="pill-btn" id="lt1-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="lt1-zoom-out" title="Thu nhỏ">−</button>
+            </div>
+            <canvas id="canvas-lt1"></canvas>
+            <div class="labels-overlay" id="lt1-labels"></div>
+          </div>
+          <div class="controls-bar">
+            <label class="control-group">
+              <input type="checkbox" id="lt1-planes" checked /> Hiện hai mặt phẳng
+            </label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>Vẽ hình biểu diễn từng bước</span></div>
+          <div class="canvas-box" style="min-height: 250px;">
+            <div class="canvas-top-right">
+              <button class="pill-btn" id="draw-lt1-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="draw-lt1-zoom-out" title="Thu nhỏ">−</button>
+            </div>
+            <canvas id="canvas-draw-lt1"></canvas>
+          </div>
+          <div style="margin-top: 8px; font-size: 12px; line-height: 1.45;">
+            <div id="draw-lt1-step-tag" style="font-size: 11px; font-weight: 800; color: var(--teal); letter-spacing: 0.05em;">BƯỚC 5/5</div>
+            <div id="draw-lt1-step-desc" style="font-size: 12.5px; color: var(--text); margin: 2px 0 4px;">Vẽ hình bình hành có các cạnh song song với <span class="math">m, n</span> để biểu diễn <span class="math-rm">mp</span><span class="math">(m, n)</span>.</div>
+            <div style="font-size: 11.5px; color: #475569;"><strong style="color: var(--blue);">Quy tắc:</strong> mặt phẳng được biểu diễn bằng hình bình hành; hai đường thẳng song song được biểu diễn bởi hai đường thẳng song song; tỉ số độ dài hai đoạn thẳng cùng phương được giữ nguyên.</div>
+          </div>
+          <div class="draw-controls">
+            <div class="draw-btns">
+              <button class="btn btn-sm" id="draw-lt1-prev">◀ Bước trước</button>
+              <button class="btn btn-primary btn-sm" id="draw-lt1-next">Vẽ bước tiếp ▶</button>
+              <button class="btn btn-sm" id="draw-lt1-auto">Tự động</button>
+              <button class="btn btn-sm" id="draw-lt1-reset">Vẽ lại</button>
+            </div>
+            <div class="dots" id="draw-lt1-dots"></div>
+          </div>
+          <div class="legend-line">
+            <span><strong>—</strong> nét thấy</span>
+            <span><strong>---</strong> nét khuất</span>
+          </div>
+        </div>
+        <div class="card scroll-y">
+          <div class="card-title"><span>Làm cá nhân 3 phút, đổi vở chấm chéo</span></div>
+          <div id="lt1-steps">
+            <div class="step-item">
+              <span class="step-circle">1</span>
+              <div>Trong <span class="math-rm">mp</span><span class="math">(m, n)</span>, hai đường thẳng <span class="math">m, n</span> cắt nhau tại <span class="math">A</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">2</span>
+              <div><span class="math">m // BC ⊂ (BCD)</span> và <span class="math">m ⊄ (BCD)</span> (vì <span class="math">A ∉ (BCD)</span>), suy ra <span class="math">m // (BCD)</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">3</span>
+              <div><span class="math">n // BD ⊂ (BCD)</span> và <span class="math">n ⊄ (BCD) ⇒ n // (BCD)</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">4</span>
+              <div><span class="math-rm">mp</span><span class="math">(m, n)</span> chứa hai đường thẳng cắt nhau <span class="math">m, n</span> cùng song song với <span class="math">(BCD)</span> nên <span class="math-rm">mp</span><span class="math">(m, n) // (BCD)</span>.</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="lt1-prev-step" disabled>◀ Lùi</button>
+            <button class="btn btn-primary" id="lt1-next-step">Kiểm tra bước tiếp ▶</button>
+          </div>
+          <div class="box-muted">
+            <strong>Tiêu chí chấm chéo:</strong> chỉ ra <span class="math">m, n</span> cắt nhau; có lí do <span class="math">m // (BCD), n // (BCD)</span>; kết luận đúng định lí; dùng đúng kí hiệu <span class="math">//, ⊂, ⊄</span>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 6: VẬN DỤNG 1 -->
+    <section class="section" id="van-dung-1">
+      <div class="sec-head">
+        <span class="sec-tag">HOẠT ĐỘNG 4 · VẬN DỤNG 1</span>
+        <h2>Chiếc bàn có chân xoay</h2>
+      </div>
+      <p class="sec-desc">Một chiếc bàn có phần chân là hai khung sắt hình chữ nhật có thể xoay quanh một trục như trong Hình 4.43. Khi mặt bàn được đặt lên phần chân bàn thì mặt bàn luôn song song với mặt đất. Hãy giải thích tại sao.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>Mô phỏng H.4.43</span>
+            <span class="pill-status" id="tbl-status">Góc 55° · (P) // (Q)</span>
+          </div>
+          <div class="canvas-box">
+            <div class="canvas-top-right">
+              <span class="pill-tag">Kéo để xoay</span>
+              <button class="pill-btn" id="tbl-zoom-in" title="Phóng to">+</button>
+              <button class="pill-btn" id="tbl-zoom-out" title="Thu nhỏ">−</button>
+              <button class="pill-btn" id="tbl-reset">Đặt lại góc nhìn</button>
+            </div>
+            <canvas id="canvas-tbl"></canvas>
+            <div class="labels-overlay" id="tbl-labels"></div>
+          </div>
+          <div class="controls-bar">
+            <button class="btn btn-primary btn-sm" id="tbl-spin">▶ Xoay khung</button>
+            <label class="control-group">Góc giữa hai khung: <strong id="tbl-angle-val">55°</strong>
+              <input type="range" id="tbl-angle" min="0" max="90" value="55" />
+            </label>
+            <label class="control-group">
+              <input type="checkbox" id="tbl-top" checked /> Hiện mặt bàn
+            </label>
+            <label class="control-group">
+              <input type="checkbox" id="tbl-edges" checked /> Tô các cạnh <span class="math">a, b, a', b'</span>
+            </label>
+          </div>
+        </div>
+        <div class="card scroll-y">
+          <div class="box">
+            <strong>Mô hình hóa:</strong> Mặt bàn ↔ mặt phẳng <span class="math">(P)</span>; mặt đất ↔ mặt phẳng <span class="math">(Q)</span>. Cạnh trên của hai khung là <span class="math">a, b</span>; cạnh dưới là <span class="math">a', b'</span> nằm trên mặt đất.
+          </div>
+          <div id="vd-steps">
+            <div class="step-item">
+              <span class="step-circle">1</span>
+              <div>Mỗi khung là hình chữ nhật nên <span class="math">a // a', b // b'</span>. Mà <span class="math">a', b' ⊂ (Q) ⇒ a // (Q), b // (Q)</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">2</span>
+              <div>Hai khung xoay quanh cùng một trục nên cạnh trên <span class="math">a, b</span> cắt nhau tại một điểm trên trục, và cùng nằm trong mặt bàn <span class="math">(P)</span>.</div>
+            </div>
+            <div class="step-item">
+              <span class="step-circle">3</span>
+              <div><span class="math">(P)</span> chứa hai đường thẳng cắt nhau <span class="math">a, b</span> cùng song song với <span class="math">(Q) ⇒ (P) // (Q)</span>, với mọi góc xoay của hai khung.</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="vd-prev-step" disabled>◀ Lùi</button>
+            <button class="btn btn-primary" id="vd-next-step">Giải thích tiếp ▶</button>
+          </div>
+          <div class="dashed-q">
+            <span class="q-mark">?</span>Nếu hai khung khép lại trùng nhau (góc <span class="math">0°</span>) thì còn kết luận được mặt bàn song song với mặt đất không?
+            <div><button class="toggle-ans" data-toggle>+ Trả lời</button></div>
+            <div class="ans-body">Không đủ căn cứ: khi đó chỉ còn một đường thẳng <span class="math">a // (Q)</span>, mặt bàn có thể nghiêng quanh <span class="math">a</span>. Đây chính là vai trò của điều kiện “hai đường thẳng cắt nhau”.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 7: TỔNG KẾT -->
+    <section class="section" id="tong-ket">
+      <div class="sec-head">
+        <span class="sec-tag">TỔNG KẾT TIẾT HỌC</span>
+        <h2>Ghi nhớ</h2>
+      </div>
+      <div class="grid-summary-top">
+        <div class="card">
+          <div class="sum-label">ĐỊNH NGHĨA</div>
+          <div class="formula-big"><span class="math">(α) // (β) ⇔ (α), (β)</span> không có điểm chung.</div>
+        </div>
+        <div class="card">
+          <div class="sum-label">NHẬN XÉT</div>
+          <div class="formula-big"><span class="math">(α) // (β), d ⊂ (α) ⇒ d // (β)</span>.</div>
+        </div>
+        <div class="card">
+          <div class="sum-label">BA VỊ TRÍ TƯƠNG ĐỐI</div>
+          <div class="formula-big">
+            Trùng nhau <span class="math">(α) ≡ (β)</span> · Cắt nhau <span class="math">(α) ∩ (β) = c</span> · Song song <span class="math">(α) // (β)</span>.
+          </div>
+        </div>
+      </div>
+      <div class="grid-summary-bottom">
+        <div class="card" style="background: var(--teal-light); border: 1.5px solid var(--teal);">
+          <div class="sum-label">ĐỊNH LÍ · ĐIỀU KIỆN ĐỂ HAI MẶT PHẲNG SONG SONG</div>
+          <div class="formula-big" style="margin-bottom: 10px;">
+            <span class="math">a, b ⊂ (α); a ∩ b = M; a // (β); b // (β) ⇒ (α) // (β)</span>.
+          </div>
+          <p style="font-size: 13.5px; line-height: 1.6; color: #1e293b; margin-bottom: 10px;">
+            Nếu mặt phẳng <span class="math">(α)</span> chứa hai đường thẳng cắt nhau và hai đường thẳng này cùng song song với mặt phẳng <span class="math">(β)</span> thì <span class="math">(α)</span> và <span class="math">(β)</span> song song với nhau.
+          </p>
+          <div>
+            <span class="kw-pill">Từ khóa: hai đường thẳng cắt nhau</span>
+            <span class="kw-pill">Quy trình 3 bước</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sum-label">NHIỆM VỤ VỀ NHÀ</div>
+          <p style="font-size: 13.5px; line-height: 1.6; color: #334155;">
+            1. Chụp ảnh <strong>2 vật thật</strong> có hai mặt phẳng song song (kiến trúc, đồ dùng, bao bì đóng gói), kèm một câu giải thích theo định lí; chia sẻ lên nhóm lớp.<br/><br/>
+            2. Đọc trước phần còn lại của Mục 2 (từ HĐ3) để chuẩn bị cho tiết học tiếp theo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MỤC 8: KIỂM TRA -->
+    <section class="section" id="kiem-tra">
+      <div class="sec-head">
+        <span class="sec-tag">KIỂM TRA CUỐI TIẾT · 10 PHÚT</span>
+        <h2>8 câu trắc nghiệm + 2 câu đúng/sai</h2>
+      </div>
+
+      <!-- Màn hình chờ -->
+      <div id="quiz-lobby" class="grid-2">
+        <div class="card scroll-y">
+          <div style="margin-bottom: 10px;">
+            <span class="box-badge" style="font-size: 11px; letter-spacing: 0.06em; padding: 3px 9px;">HƯỚNG DẪN</span>
+          </div>
+          <p style="font-size: 14px; line-height: 1.6; color: #1e293b; margin-bottom: 14px;">
+            Bài gồm <strong>8 câu trắc nghiệm</strong> (mỗi câu 0,75 điểm) và <strong>2 câu đúng/sai</strong> (mỗi câu 2 điểm; đúng 1 ý 0,2 · 2 ý 0,5 · 3 ý 1 · 4 ý 2 điểm). Thời gian <strong>10 phút</strong>, tính từ lúc bấm “Bắt đầu”. Hết giờ bài được nộp tự động và bảng xếp hạng hiện ra. Xếp hạng theo điểm, bằng điểm thì ai làm nhanh hơn xếp trên.
+          </p>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="stu-name">Họ và tên</label>
+              <input type="text" id="stu-name" placeholder="Ví dụ: Nguyễn Văn An" />
+            </div>
+            <div class="form-field">
+              <label for="stu-class">Lớp</label>
+              <input type="text" id="stu-class" value="11A1" />
+            </div>
+          </div>
+          <div id="quiz-err" style="color: var(--pink); font-size: 12.5px; margin-bottom: 8px; display: none;">Vui lòng nhập họ và tên trước khi bắt đầu.</div>
+          <div class="btn-row" style="margin-bottom: 20px;">
+            <button class="btn btn-primary" id="btn-start-quiz" style="padding: 9px 18px; font-size: 13.5px;">Bắt đầu làm bài</button>
+          </div>
+
+        </div>
+
+        <div class="card scroll-y">
+          <div class="card-title" style="font-size: 15px; font-weight: 800;">
+            <span id="lb-title">Bảng xếp hạng lớp 11A1</span>
+          </div>
+          <div class="box-muted" style="font-size: 12.5px; margin-bottom: 12px;">
+            Bảng xếp hạng được lưu trực tiếp trên trình duyệt này, tự động xếp theo điểm cao nhất và thời gian làm bài nhanh nhất.
+          </div>
+          <table class="lb-table">
+            <thead>
+              <tr><th>#</th><th>Họ và tên</th><th>Điểm</th><th>Thời gian</th></tr>
+            </thead>
+            <tbody id="lb-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Màn hình làm bài -->
+      <div id="quiz-active" class="grid-2" style="display:none;">
+        <div class="card scroll-y">
+          <div class="card-title">
+            <span id="q-header-label">Câu 1/10</span>
+            <span class="pill-tag" id="q-type-label">Trắc nghiệm · 0,75đ</span>
+          </div>
+          <div id="q-content" style="font-size: 14.5px; line-height: 1.55; margin-bottom: 14px; font-weight: 600;"></div>
+          <div id="q-options"></div>
+          <div class="btn-row" style="margin-top: auto; padding-top: 12px;">
+            <button class="btn" id="q-prev">◀ Câu trước</button>
+            <button class="btn btn-primary" id="q-next">Câu tiếp ▶</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="timer-box" id="quiz-timer">10:00</div>
+          <div style="font-size: 12.5px; color: var(--muted); margin-bottom: 8px; display:flex; justify-content:space-between;">
+            <span>Chọn nhanh câu hỏi</span>
+            <strong id="q-answered-count">Đã trả lời: 0/10</strong>
+          </div>
+          <div class="q-grid" id="q-nav-grid"></div>
+          <button class="btn btn-primary" id="btn-submit-quiz" style="width:100%; margin-top:auto;">Nộp bài</button>
+        </div>
+      </div>
+
+      <!-- Màn hình kết quả -->
+      <div id="quiz-result" class="grid-2" style="display:none;">
+        <div class="card scroll-y">
+          <div class="card-title"><span>Kết quả bài kiểm tra</span></div>
+          <div class="theorem-box" id="res-summary"></div>
+          <div id="res-breakdown"></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btn-retry-quiz">Làm lại bài kiểm tra</button>
+          </div>
+        </div>
+        <div class="card scroll-y">
+          <div class="card-title"><span id="lb-title-res">Bảng xếp hạng lớp 11A1</span></div>
+          <table class="lb-table">
+            <thead>
+              <tr><th>#</th><th>Họ và tên</th><th>Điểm</th><th>Thời gian</th></tr>
+            </thead>
+            <tbody id="lb-body-res"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal xác nhận nộp bài -->
+  <div class="modal-backdrop" id="submit-modal">
+    <div class="modal-card">
+      <h3>Xác nhận nộp bài</h3>
+      <p id="modal-msg">Bạn có chắc chắn muốn nộp bài kiểm tra ngay bây giờ?</p>
+      <div class="btn-row" style="justify-content: flex-end; margin-bottom: 0;">
+        <button class="btn" id="modal-cancel">Quay lại</button>
+        <button class="btn btn-primary" id="modal-confirm">Nộp bài</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================= NAVIGATION & HASH ROUTING ================= */
+    const stepBtns = document.querySelectorAll('.step-btn');
+    const sections = document.querySelectorAll('.section');
+    function activateTab(id) {
+      stepBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+      sections.forEach(s => s.classList.toggle('active', s.id === id));
+      try { history.replaceState(null, '', '#' + id); } catch (e) {}
+      setTimeout(resizeAllCanvases, 30);
+    }
+    stepBtns.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
+    const initHash = location.hash ? location.hash.slice(1) : 'dieu-kien';
+    if (document.getElementById(initHash)) activateTab(initHash);
+
+    /* ================= SUBTABS & TOGGLES ================= */
+    document.querySelectorAll('.subtabs').forEach(group => {
+      const btns = group.querySelectorAll('.subtab');
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const parent = group.parentElement;
+          parent.querySelectorAll('.subpanel').forEach(p => {
+            p.style.display = p.id === btn.dataset.target ? 'flex' : 'none';
+          });
+          setTimeout(resizeAllCanvases, 30);
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-toggle]').forEach(btn => {
+      const origText = btn.textContent;
+      btn.addEventListener('click', () => {
+        const body = btn.parentElement.nextElementSibling;
+        const open = body.classList.toggle('open');
+        btn.textContent = open ? origText.replace('+', '−') : origText;
+      });
+    });
+
+    /* ================= STEPPER PROOFS ================= */
+    function initProofStepper(containerId, prevId, nextId) {
+      const items = document.querySelectorAll('#' + containerId + ' .step-item');
+      const prev = document.getElementById(prevId);
+      const next = document.getElementById(nextId);
+      let idx = 0;
+      function update() {
+        items.forEach((el, i) => el.classList.toggle('active', i < idx));
+        prev.disabled = idx === 0;
+        next.disabled = idx === items.length;
+      }
+      prev.addEventListener('click', () => { if (idx > 0) { idx--; update(); } });
+      next.addEventListener('click', () => { if (idx < items.length) { idx++; update(); } });
+      update();
+    }
+    initProofStepper('m3-steps', 'm3-prev-step', 'm3-next-step');
+    initProofStepper('vd1-steps', 'vd1-prev-step', 'vd1-next-step');
+    initProofStepper('lt1-steps', 'lt1-prev-step', 'lt1-next-step');
+    initProofStepper('vd-steps', 'vd-prev-step', 'vd-next-step');
+
+    /* ================= 3D ENGINE HELPER ================= */
+    const all3DScenes = [];
+    const canvasResizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(() => {
+          requestAnimationFrame(() => {
+            all3DScenes.forEach(sc => sc.render());
+            if (typeof resizeAllDrawers === 'function') resizeAllDrawers();
+          });
+        })
+      : null;
+
+    function create3DScene(canvasId, defaultYaw, defaultPitch, drawFn) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const state = { yaw: defaultYaw, pitch: defaultPitch, dragging: false, lx: 0, ly: 0 };
+
+      function project(x, y, z, w, h, scale) {
+        const cy = Math.cos(state.yaw), sy = Math.sin(state.yaw);
+        const cp = Math.cos(state.pitch), sp = Math.sin(state.pitch);
+        const x1 = x * cy - z * sy;
+        const z1 = x * sy + z * cy;
+        const y2 = y * cp - z1 * sp;
+        const z2 = y * sp + z1 * cp;
+        const fov = 560;
+        const factor = fov / (fov + z2 + 270);
+        return { x: w / 2 + x1 * scale * factor, y: h / 2 - y2 * scale * factor, z: z2 };
+      }
+
+      function render() {
+        const box = canvas.parentElement;
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const tw = Math.round(rect.width * dpr);
+        const th = Math.round(rect.height * dpr);
+        if (canvas.width !== tw || canvas.height !== th) {
+          canvas.width = tw;
+          canvas.height = th;
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        const scale = Math.min(rect.width, rect.height) / 250;
+        drawFn(ctx, rect.width, rect.height, scale, (x, y, z) => project(x, y, z, rect.width, rect.height, scale));
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true;
+        state.lx = e.clientX;
+        state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.yaw += (e.clientX - state.lx) * 0.01;
+        state.pitch = Math.max(-1.15, Math.min(1.15, state.pitch + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX;
+        state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.dist = Math.max(4.2, Math.min(16, state.dist + e.deltaY * 0.008));
+        render();
+      }, { passive: false });
+
+      if (canvasResizeObserver && canvas.parentElement) {
+        canvasResizeObserver.observe(canvas.parentElement);
+      }
+
+      const api = {
+        render,
+        reset: () => { state.yaw = defaultYaw; state.pitch = defaultPitch; render(); }
+      };
+      all3DScenes.push(api);
+      return api;
+    }
+
+    function drawPoly(ctx, pts, fill, stroke, dash = [], lineWidth = 1.6) {
+      ctx.save();
+      ctx.beginPath();
+      pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.closePath();
+      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      if (stroke) { ctx.setLineDash(dash); ctx.strokeStyle = stroke; ctx.lineWidth = lineWidth; ctx.stroke(); }
+      ctx.restore();
+    }
+    function drawSeg(ctx, p1, p2, color, width = 2, dash = []) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash(dash);
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.stroke();
+      ctx.restore();
+    }
+    function drawLabel(ctx, p, text, color = '#0f172a', dx = 6, dy = -6) {
+      ctx.save();
+      ctx.font = 'italic 700 14px "Times New Roman", serif';
+      ctx.fillStyle = color;
+      ctx.fillText(text, p.x + dx, p.y + dy);
+      ctx.restore();
+    }
+    function drawDot(ctx, p, color = '#0f172a', r = 3.5) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.restore();
+    }
+    function drawSortedFaces(ctx, faces) {
+      faces.sort((a, b) => b.z - a.z);
+      faces.forEach(f => {
+        drawPoly(ctx, f.pts, f.fill, f.stroke, f.dash || [], f.lw || 1.3);
+        if (f.label) drawLabel(ctx, f.label.p, f.label.text, f.label.color, f.label.dx || 0, f.label.dy || 0);
+      });
+    }
+    function avgZ(pts) {
+      let s = 0;
+      for (let i = 0; i < pts.length; i++) s += pts[i].z;
+      return s / pts.length;
+    }
+
+    /* ================= THREE.JS WEBGL 3D HELPER ================= */
+    function createThreeOrbitScene(canvasId, defaultAz, defaultEl, defaultDist, buildFn) {
+      const canvas = document.getElementById(canvasId);
+      const box = canvas.parentElement;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.shadowMap.enabled = true;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(38, 1.5, 0.1, 100);
+
+      // Studio 3-point lighting
+      const amb = new THREE.AmbientLight(0xffffff, 0.72);
+      scene.add(amb);
+      const hemi = new THREE.HemisphereLight(0xf8fafc, 0xcbd5e1, 0.45);
+      scene.add(hemi);
+      const dir = new THREE.DirectionalLight(0xffffff, 0.85);
+      dir.position.set(6, 11, 8);
+      dir.castShadow = true;
+      scene.add(dir);
+      const fill = new THREE.DirectionalLight(0xe0f2fe, 0.35);
+      fill.position.set(-7, 4, -6);
+      scene.add(fill);
+
+      const state = { az: defaultAz, el: defaultEl, dist: defaultDist, dragging: false, lx: 0, ly: 0 };
+
+      function updateCam() {
+        const x = state.dist * Math.cos(state.el) * Math.sin(state.az);
+        const y = state.dist * Math.sin(state.el);
+        const z = state.dist * Math.cos(state.el) * Math.cos(state.az);
+        camera.position.set(x, y, z);
+        camera.lookAt(0, 0, 0);
+      }
+
+      const contentApi = buildFn(scene);
+
+      function render() {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        updateCam();
+        renderer.render(scene, camera);
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true;
+        state.lx = e.clientX;
+        state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.az -= (e.clientX - state.lx) * 0.01;
+        state.el = Math.max(-1.48, Math.min(1.48, state.el + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX;
+        state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.dist = Math.max(4.2, Math.min(16, state.dist + e.deltaY * 0.008));
+        render();
+      }, { passive: false });
+
+      if (canvasResizeObserver && box) canvasResizeObserver.observe(box);
+
+      const api = {
+        render,
+        reset: () => { state.az = defaultAz; state.el = defaultEl; state.dist = defaultDist; render(); },
+        zoom: (d) => { state.dist = Math.max(4.2, Math.min(16, state.dist + d)); render(); },
+        content: contentApi
+      };
+      all3DScenes.push(api);
+      return api;
+    }
+
+    function makePlaneWithBorder(w, h, colorHex, opacity) {
+      const grp = new THREE.Group();
+      const geo = new THREE.PlaneGeometry(w, h);
+      const mat = new THREE.MeshBasicMaterial({ color: colorHex, transparent: true, opacity, side: THREE.DoubleSide, depthWrite: false });
+      grp.add(new THREE.Mesh(geo, mat));
+      const edges = new THREE.EdgesGeometry(geo);
+      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: colorHex }));
+      grp.add(line);
+      return grp;
+    }
+
+    /* ================= 1. CUCUMBER 3D (THREE.JS WEBGL — KHỐI TRỤ NGUYÊN + MẶT CẮT MÀU CAM) ================= */
+    let cucAnimProgress = 1, cucAnimId = null;
+    const cucCountEl = document.getElementById('cuc-count');
+    const cucCountVal = document.getElementById('cuc-count-val');
+    const cucSkewEl = document.getElementById('cuc-skew');
+    const cucPlanesEl = document.getElementById('cuc-planes');
+    const cucStatusEl = document.getElementById('cuc-status');
+
+    const sceneCuc = createThreeOrbitScene('canvas-cuc', 0.32, 0.52, 6.8, (scene) => {
+      // Thớt gỗ màu vàng cam ấm giống hình mẫu
+      const boardGeo = new THREE.BoxGeometry(6.8, 0.22, 3.8);
+      const boardMat = new THREE.MeshStandardMaterial({ color: 0xe5b87f, roughness: 0.78, metalness: 0.02 });
+      const board = new THREE.Mesh(boardGeo, boardMat);
+      board.position.set(0, -0.78, 0);
+      scene.add(board);
+
+      // Một khối trụ xanh to nguyên vẹn duy nhất nằm trên thớt
+      const cylGeo = new THREE.CylinderGeometry(0.68, 0.68, 5.4, 40);
+      cylGeo.rotateZ(Math.PI / 2);
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.42, metalness: 0.04 });
+      const endMat = new THREE.MeshStandardMaterial({ color: 0x16a34a, roughness: 0.5 });
+      const cucumber = new THREE.Mesh(cylGeo, [skinMat, endMat, endMat]);
+      cucumber.position.set(0, 0.01, 0);
+      scene.add(cucumber);
+
+      const planesGroup = new THREE.Group();
+      scene.add(planesGroup);
+
+      function rebuild() {
+        while (planesGroup.children.length) planesGroup.remove(planesGroup.children[0]);
+        const n = parseInt(cucCountEl.value, 10);
+        const skew = cucSkewEl.checked;
+        const showPlanes = cucPlanesEl.checked;
+        if (!showPlanes) return;
+
+        const totalLen = 4.6;
+        const xStart = -totalLen / 2;
+        const step = n > 1 ? totalLen / (n - 1) : 0;
+        const shownCuts = Math.max(1, Math.min(n, Math.ceil(cucAnimProgress * n)));
+
+        for (let k = 0; k < shownCuts; k++) {
+          const xCut = n > 1 ? (xStart + k * step) : 0;
+          // Trường hợp 1: Cắt song song (góc = 0); Trường hợp 2: Cắt lệch (các mặt phẳng màu cam nghiêng giao nhau)
+          const skewAngle = skew ? ((k % 2 === 0 ? 1 : -1) * 0.36 + (k - (n - 1) / 2) * 0.06) : 0;
+          const pl = makePlaneWithBorder(3.4, 2.3, 0xea580c, 0.24);
+          pl.rotation.y = Math.PI / 2 + skewAngle;
+          pl.position.set(xCut, 0.48, 0);
+          planesGroup.add(pl);
+        }
+      }
+
+      rebuild();
+      return { rebuild };
+    });
+
+    document.getElementById('cuc-reset').addEventListener('click', () => sceneCuc.reset());
+    document.getElementById('cuc-zoom-in').addEventListener('click', () => sceneCuc.zoom(-1.0));
+    document.getElementById('cuc-zoom-out').addEventListener('click', () => sceneCuc.zoom(1.0));
+    function updateCuc() {
+      const n = parseInt(cucCountEl.value, 10);
+      cucCountVal.textContent = n;
+      const skew = cucSkewEl.checked;
+      cucStatusEl.textContent = skew
+        ? 'Các nhát cắt không song song: lát dày mỏng khác nhau, các mặt cắt giao nhau'
+        : `${n} nhát cắt nằm trên ${n} mặt phẳng song song: lát dày đều`;
+      cucStatusEl.classList.toggle('warn', skew);
+      sceneCuc.content.rebuild();
+      sceneCuc.render();
+    }
+    cucCountEl.addEventListener('input', updateCuc);
+    cucSkewEl.addEventListener('change', updateCuc);
+    cucPlanesEl.addEventListener('change', updateCuc);
+    document.getElementById('cuc-play').addEventListener('click', () => {
+      if (cucAnimId) cancelAnimationFrame(cucAnimId);
+      cucAnimProgress = 0;
+      const step = () => {
+        cucAnimProgress += 0.02;
+        if (cucAnimProgress >= 1) {
+          cucAnimProgress = 1;
+          sceneCuc.content.rebuild();
+          sceneCuc.render();
+          return;
+        }
+        sceneCuc.content.rebuild();
+        sceneCuc.render();
+        cucAnimId = requestAnimationFrame(step);
+      };
+      cucAnimId = requestAnimationFrame(step);
+    });
+
+    /* ================= 2. STAIRS 3D (H.4.40 — 4 BẬC + 4 MẶT PHẲNG SONG SONG KHÁC MÀU) ================= */
+    const stairsPlanesEl = document.getElementById('stairs-planes');
+    const stairsLabelsEl = document.getElementById('stairs-labels');
+    const sceneStairs = (() => {
+      const canvas = document.getElementById('canvas-stairs');
+      const box = canvas.parentElement;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(32, 1.6, 0.1, 100);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+      const dl = new THREE.DirectionalLight(0xffffff, 0.65);
+      dl.position.set(6, 10, 8);
+      scene.add(dl);
+      const fill = new THREE.DirectionalLight(0xe2e8f0, 0.35);
+      fill.position.set(-6, 4, -5);
+      scene.add(fill);
+
+      // Tường xám phẳng phía sau gắn 4 bậc thang giống H.4.40
+      const wallGeo = new THREE.BoxGeometry(0.18, 3.6, 4.6);
+      const wallMat = new THREE.MeshStandardMaterial({ color: 0xb0b7c3, roughness: 0.75 });
+      const wall = new THREE.Mesh(wallGeo, wallMat);
+      wall.position.set(0.95, 0.25, 0);
+      scene.add(wall);
+
+      // 4 bậc thang cách đều + 4 mặt phẳng song song khác màu: (P), (Q), (R), (S)
+      const planeConfigs = [
+        { name: '(P)', hex: 0x2563eb, css: '#2563eb' },
+        { name: '(Q)', hex: 0xea580c, css: '#ea580c' },
+        { name: '(R)', hex: 0xdb2777, css: '#db2777' },
+        { name: '(S)', hex: 0x0d7a72, css: '#0d7a72' }
+      ];
+
+      const treadMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.45 });
+      const sideMat = new THREE.MeshStandardMaterial({ color: 0xdbe2ea, roughness: 0.65 });
+      const planesGroup = new THREE.Group();
+      scene.add(planesGroup);
+
+      const stepW = 1.45, stepH = 0.22, stepD = 0.78;
+      const yGap = 0.72, zGap = 0.88;
+      const yBase = -1.05, zBase = 1.32;
+      const labelAnchors = [];
+
+      for (let i = 0; i < 4; i++) {
+        const yTop = yBase + i * yGap;
+        const zCenter = zBase - i * zGap;
+
+        // Bậc thang gắn vào tường xám
+        const boxGeo = new THREE.BoxGeometry(stepW, stepH, stepD);
+        const stepMesh = new THREE.Mesh(boxGeo, [sideMat, sideMat, treadMat, sideMat, sideMat, sideMat]);
+        stepMesh.position.set(0.95 - stepW / 2 - 0.05, yTop - stepH / 2, zCenter);
+        scene.add(stepMesh);
+
+        const edge = new THREE.LineSegments(
+          new THREE.EdgesGeometry(boxGeo),
+          new THREE.LineBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.55 })
+        );
+        stepMesh.add(edge);
+
+        // Mặt phẳng song song chứa mặt trên của từng bậc thang
+        const cfg = planeConfigs[i];
+        const pl = makePlaneWithBorder(4.8, 3.9, cfg.hex, 0.17);
+        pl.rotation.x = -Math.PI / 2;
+        pl.position.set(-0.65, yTop + 0.01, 0);
+        planesGroup.add(pl);
+
+        labelAnchors.push({
+          text: cfg.name,
+          color: cfg.css,
+          pos: new THREE.Vector3(-2.65, yTop + 0.05, 1.55)
+        });
+      }
+
+      const state = { az: -0.62, el: 0.34, dist: 9.2, dragging: false, lx: 0, ly: 0 };
+
+      function render() {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        camera.position.set(
+          state.dist * Math.cos(state.el) * Math.sin(state.az),
+          state.dist * Math.sin(state.el),
+          state.dist * Math.cos(state.el) * Math.cos(state.az)
+        );
+        camera.lookAt(-0.2, 0.1, 0);
+        renderer.render(scene, camera);
+
+        if (stairsLabelsEl) {
+          stairsLabelsEl.innerHTML = '';
+          if (planesGroup.visible) {
+            scene.updateMatrixWorld(true);
+            labelAnchors.forEach(item => {
+              const v = item.pos.clone().project(camera);
+              if (v.z > 1) return;
+              const el = document.createElement('span');
+              el.className = 'lbl-3d';
+              el.textContent = item.text;
+              el.style.color = item.color;
+              el.style.left = ((v.x * 0.5 + 0.5) * rect.width) + 'px';
+              el.style.top = ((-v.y * 0.5 + 0.5) * rect.height) + 'px';
+              stairsLabelsEl.appendChild(el);
+            });
+          }
+        }
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true; state.lx = e.clientX; state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.az -= (e.clientX - state.lx) * 0.01;
+        state.el = Math.max(-1.48, Math.min(1.48, state.el + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX; state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.dist = Math.max(4.5, Math.min(16, state.dist + e.deltaY * 0.008));
+        render();
+      }, { passive: false });
+      if (canvasResizeObserver && box) canvasResizeObserver.observe(box);
+
+      const api = {
+        render,
+        reset: () => { state.az = -0.62; state.el = 0.34; state.dist = 9.2; render(); },
+        zoom: (d) => { state.dist = Math.max(4.5, Math.min(16, state.dist + d)); render(); },
+        content: { setShowPlanes: (v) => { planesGroup.visible = v; } }
+      };
+      all3DScenes.push(api);
+      return api;
+    })();
+    document.getElementById('stairs-reset').addEventListener('click', () => sceneStairs.reset());
+    document.getElementById('stairs-zoom-in').addEventListener('click', () => sceneStairs.zoom(-1.1));
+    document.getElementById('stairs-zoom-out').addEventListener('click', () => sceneStairs.zoom(1.1));
+    stairsPlanesEl.addEventListener('change', () => {
+      sceneStairs.content.setShowPlanes(stairsPlanesEl.checked);
+      sceneStairs.render();
+    });
+
+    const relDistEl = document.getElementById('rel-dist');
+    const relAngleEl = document.getElementById('rel-angle');
+    const relLineDEl = document.getElementById('rel-line-d');
+    const relStatusEl = document.getElementById('rel-status');
+    const relLabelsEl = document.getElementById('rel-labels');
+
+    const sceneRel = (() => {
+      const canvas = document.getElementById('canvas-rel');
+      const box = canvas.parentElement;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      // Góc nhìn FOV 26° giúp hai hình bình hành song song nhìn thẳng, cân đối và bằng nhau rõ rệt
+      const camera = new THREE.PerspectiveCamera(26, 1.6, 0.1, 100);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+      const state = { az: 0.42, el: 0.34, dist: 10.6, dragging: false, lx: 0, ly: 0 };
+
+      // Hai mặt phẳng không có độ dày (PlaneGeometry), kích thước bằng nhau 5.4 x 3.6
+      const planeA = makePlaneWithBorder(5.4, 3.6, 0x2563eb, 0.22);
+      planeA.rotation.x = -Math.PI / 2;
+      scene.add(planeA);
+
+      const planeBPivot = new THREE.Group();
+      scene.add(planeBPivot);
+      const planeB = makePlaneWithBorder(5.4, 3.6, 0xea580c, 0.22);
+      planeB.rotation.x = -Math.PI / 2;
+      planeBPivot.add(planeB);
+
+      // Đường thẳng d nằm trong (α)
+      const lineDGeo = new THREE.CylinderGeometry(0.036, 0.036, 4.4, 14);
+      lineDGeo.rotateZ(Math.PI / 2);
+      const lineD = new THREE.Mesh(lineDGeo, new THREE.MeshBasicMaterial({ color: 0x0d7a72 }));
+      lineD.rotation.y = 0.28;
+      scene.add(lineD);
+
+      // Giao tuyến c (đỏ đậm) luôn nằm chính xác trên giao của (α) và (β) khi góc ≠ 0°
+      const lineCGeo = new THREE.CylinderGeometry(0.048, 0.048, 4.4, 14);
+      lineCGeo.rotateX(Math.PI / 2);
+      const lineC = new THREE.Mesh(lineCGeo, new THREE.MeshBasicMaterial({ color: 0xdc2626 }));
+      lineC.visible = false;
+      scene.add(lineC);
+
+      let curYA = 0.65, curYB = -0.65, curXInt = 0, curIsCut = false;
+
+      function update() {
+        const dist = (parseFloat(relDistEl.value) / 100) * 1.9;
+        const deg = parseFloat(relAngleEl.value);
+        const ang = (deg * Math.PI) / 180;
+        const yA = dist / 2;
+        const yB = -dist / 2;
+        curYA = yA;
+        curYB = yB;
+
+        planeA.position.set(0, yA, 0);
+        lineD.position.set(0, yA + 0.015, 0);
+        lineD.visible = relLineDEl.checked;
+
+        if (Math.abs(deg) > 0.1) {
+          // Khi góc ≠ 0°: hai mặt phẳng (không giới hạn) LUÔN cắt nhau theo giao tuyến c rõ ràng
+          curIsCut = true;
+          // Đặt trục giao tuyến c nằm gọn trong khung nhìn, dịch nhẹ theo khoảng cách
+          const xInt = (dist / 1.9) * 0.9 * (deg > 0 ? 1 : -1);
+          curXInt = xInt;
+          planeBPivot.position.set(xInt, yA, 0);
+          planeBPivot.rotation.set(0, 0, ang);
+          planeB.position.set(-xInt * 0.35, 0, 0);
+
+          lineC.visible = true;
+          lineC.position.set(xInt, yA, 0);
+          relStatusEl.textContent = `(α) cắt (β) theo giao tuyến c (góc ${Math.abs(deg)}°)`;
+          relStatusEl.classList.add('warn');
+        } else {
+          curIsCut = false;
+          planeBPivot.position.set(0, yB, 0);
+          planeBPivot.rotation.set(0, 0, 0);
+          planeB.position.set(0, 0, 0);
+          lineC.visible = false;
+
+          if (dist < 0.05) {
+            relStatusEl.textContent = '(α) ≡ (β) — Hai mặt phẳng trùng nhau';
+            relStatusEl.classList.remove('warn');
+          } else {
+            relStatusEl.textContent = '(α) // (β) — Hai mặt phẳng song song (không có điểm chung)';
+            relStatusEl.classList.remove('warn');
+          }
+        }
+      }
+
+      function updateLabels(w, h) {
+        relLabelsEl.innerHTML = '';
+        scene.updateMatrixWorld(true);
+        const anchors = [
+          { text: '(α)', color: '#2563eb', pos: new THREE.Vector3(-2.35, curYA + 0.04, 1.45) },
+          { text: '(β)', color: '#ea580c', pos: planeBPivot.localToWorld(new THREE.Vector3(-2.15, 0.04, 1.45)) }
+        ];
+        if (relLineDEl.checked) {
+          anchors.push({ text: 'd', color: '#0d7a72', pos: new THREE.Vector3(2.2, curYA + 0.08, -0.62) });
+        }
+        if (curIsCut) {
+          anchors.push({ text: 'c', color: '#dc2626', pos: new THREE.Vector3(curXInt, curYA + 0.06, 2.38) });
+        }
+        anchors.forEach(item => {
+          const v = item.pos.clone().project(camera);
+          if (v.z > 1) return;
+          const el = document.createElement('span');
+          el.className = 'lbl-3d';
+          el.textContent = item.text;
+          el.style.color = item.color;
+          el.style.left = ((v.x * 0.5 + 0.5) * w) + 'px';
+          el.style.top = ((-v.y * 0.5 + 0.5) * h) + 'px';
+          relLabelsEl.appendChild(el);
+        });
+      }
+
+      function render() {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        const x = state.dist * Math.cos(state.el) * Math.sin(state.az);
+        const y = state.dist * Math.sin(state.el);
+        const z = state.dist * Math.cos(state.el) * Math.cos(state.az);
+        camera.position.set(x, y, z);
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+        updateLabels(rect.width, rect.height);
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true; state.lx = e.clientX; state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.az -= (e.clientX - state.lx) * 0.01;
+        state.el = Math.max(-1.48, Math.min(1.48, state.el + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX; state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.dist = Math.max(4.2, Math.min(16, state.dist + e.deltaY * 0.008));
+        render();
+      }, { passive: false });
+      if (canvasResizeObserver && box) canvasResizeObserver.observe(box);
+
+      update();
+      const api = {
+        render,
+        reset: () => { state.az = 0.42; state.el = 0.34; state.dist = 10.6; render(); },
+        zoom: (d) => { state.dist = Math.max(5.5, Math.min(18, state.dist + d)); render(); },
+        content: { update }
+      };
+      all3DScenes.push(api);
+      return api;
+    })();
+
+    document.getElementById('rel-reset').addEventListener('click', () => sceneRel.reset());
+    document.getElementById('rel-zoom-in').addEventListener('click', () => sceneRel.zoom(-1.2));
+    document.getElementById('rel-zoom-out').addEventListener('click', () => sceneRel.zoom(1.2));
+    function updateRel() { sceneRel.content.update(); sceneRel.render(); }
+    relDistEl.addEventListener('input', updateRel);
+    relAngleEl.addEventListener('input', updateRel);
+    relLineDEl.addEventListener('change', updateRel);
+    document.getElementById('rel-parallel').addEventListener('click', () => {
+      relAngleEl.value = 0;
+      relDistEl.value = 65;
+      updateRel();
+    });
+
+    /* ================= 3. CONDITION 3D (H.4.41 — THREE.JS WEBGL) ================= */
+    let m3Mode = 1; // 0: Giả sử (α) cắt (β), 1: Kết luận (α) // (β), 2: Bỏ điều kiện cắt nhau
+    let m3TiltCurrent = 0, m3TiltTarget = 0, m3AnimId = null;
+    const m3StatusEl = document.getElementById('m3-status');
+    const m3StatusDot = document.getElementById('m3-status-dot');
+    const m3LabelsEl = document.getElementById('m3-labels');
+
+    const sceneM3 = (() => {
+      const canvas = document.getElementById('canvas-m3');
+      const box = canvas.parentElement;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(36, 1.6, 0.1, 100);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+      const dl = new THREE.DirectionalLight(0xffffff, 0.55);
+      dl.position.set(5, 9, 7);
+      scene.add(dl);
+
+      const state = { az: 0.36, el: 0.38, dist: 7.8, dragging: false, lx: 0, ly: 0 };
+
+      // Plane (β) - fixed horizontal orange plane at y = -0.75
+      const planeB = makePlaneWithBorder(5.2, 3.6, 0xea580c, 0.22);
+      planeB.rotation.x = -Math.PI / 2;
+      planeB.position.set(0, -0.75, 0);
+      scene.add(planeB);
+
+      // Pivot for plane (α) anchored along x = +1.9, y = -0.75 (where intersection line c lies)
+      const alphaPivot = new THREE.Group();
+      alphaPivot.position.set(1.85, -0.75, 0);
+      scene.add(alphaPivot);
+
+      // Plane (α) inside pivot
+      const planeA = makePlaneWithBorder(4.8, 3.3, 0x2563eb, 0.22);
+      planeA.rotation.x = -Math.PI / 2;
+      planeA.position.set(-2.0, 0, 0);
+      alphaPivot.add(planeA);
+
+      // Helper to build a crisp 3D cylinder segment between two Vector3 points
+      function makeSegMesh(p1, p2, radius, colorHex) {
+        const dir = new THREE.Vector3().subVectors(p2, p1);
+        const len = dir.length();
+        const geo = new THREE.CylinderGeometry(radius, radius, len, 14);
+        const mat = new THREE.MeshBasicMaterial({ color: colorHex });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+        mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+        return mesh;
+      }
+
+      const dynamicAlpha = new THREE.Group();
+      alphaPivot.add(dynamicAlpha);
+
+      // Intersection line c (bold red) along x = 1.85, y = -0.75
+      const lineC = makeSegMesh(new THREE.Vector3(1.85, -0.74, -2.05), new THREE.Vector3(1.85, -0.74, 2.05), 0.048, 0xdc2626);
+      scene.add(lineC);
+
+      // Red point P on c
+      const pointP = new THREE.Mesh(new THREE.SphereGeometry(0.11, 20, 20), new THREE.MeshBasicMaterial({ color: 0xdc2626 }));
+      pointP.position.set(1.85, -0.74, 0.85);
+      scene.add(pointP);
+
+      // Label anchor map
+      let labelAnchors = [];
+
+      function rebuildModeGeometry() {
+        while (dynamicAlpha.children.length) dynamicAlpha.remove(dynamicAlpha.children[0]);
+        labelAnchors = [
+          { text: '(β)', color: '#d97706', pos: () => new THREE.Vector3(-2.15, -0.75, 0.25) },
+          { text: '(α)', color: '#2563eb', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-3.95, 0.02, -0.15)) }
+        ];
+
+        if (m3Mode === 1) {
+          // Mode ②: Parallel (α) // (β)
+          const pA1 = new THREE.Vector3(-3.3, 0.03, 0.15);
+          const pA2 = new THREE.Vector3(-0.6, 0.03, -0.15);
+          const pB1 = new THREE.Vector3(-2.6, 0.03, -1.05);
+          const pB2 = new THREE.Vector3(-1.1, 0.03, 1.05);
+          const pM = new THREE.Vector3(-1.95, 0.03, 0.0);
+          dynamicAlpha.add(makeSegMesh(pA1, pA2, 0.036, 0x1e293b));
+          dynamicAlpha.add(makeSegMesh(pB1, pB2, 0.036, 0x1e293b));
+          const dotM = new THREE.Mesh(new THREE.SphereGeometry(0.085, 18, 18), new THREE.MeshBasicMaterial({ color: 0xea580c }));
+          dotM.position.copy(pM);
+          dynamicAlpha.add(dotM);
+
+          lineC.visible = false;
+          pointP.visible = false;
+
+          labelAnchors.push(
+            { text: 'M', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-1.95, 0.28, -0.15)) },
+            { text: 'b', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-0.42, 0.05, -0.15)) },
+            { text: 'a', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-0.98, 0.05, 1.18)) }
+          );
+        } else if (m3Mode === 0) {
+          // Mode ①: Assume (α) ∩ (β) = c, a // c, b through M cuts c at P
+          const pM = new THREE.Vector3(-2.1, 0.03, -0.2);
+          const pA1 = new THREE.Vector3(-2.1, 0.03, -1.35);
+          const pA2 = new THREE.Vector3(-2.1, 0.03, 1.15);
+          // Line b goes from (-3.1, 0.03, -0.7) through M(-2.1, -0.2) down to P(0, 0.85) in pivot local coords!
+          const pB1 = new THREE.Vector3(-3.05, 0.03, -0.68);
+          const pB2 = new THREE.Vector3(0.0, 0.03, 0.85);
+
+          dynamicAlpha.add(makeSegMesh(pA1, pA2, 0.036, 0x1e293b));
+          // Green subtle parallel highlight tips on a
+          dynamicAlpha.add(makeSegMesh(pA1, new THREE.Vector3(-2.1, 0.03, -1.52), 0.024, 0x16a34a));
+          dynamicAlpha.add(makeSegMesh(pA2, new THREE.Vector3(-2.1, 0.03, 1.32), 0.024, 0x16a34a));
+          dynamicAlpha.add(makeSegMesh(pB1, pB2, 0.038, 0x1e293b));
+
+          const dotM = new THREE.Mesh(new THREE.SphereGeometry(0.085, 18, 18), new THREE.MeshBasicMaterial({ color: 0xea580c }));
+          dotM.position.copy(pM);
+          dynamicAlpha.add(dotM);
+
+          lineC.visible = true;
+          pointP.visible = true;
+
+          labelAnchors.push(
+            { text: 'M', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-2.1, 0.28, -0.35)) },
+            { text: 'a', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-2.1, 0.05, 1.48)) },
+            { text: 'b', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-3.2, 0.08, -0.82)) },
+            { text: 'c', color: '#dc2626', pos: () => new THREE.Vector3(1.85, -0.74, 2.22) },
+            { text: 'P', color: '#dc2626', pos: () => new THREE.Vector3(2.12, -0.62, 0.92) }
+          );
+        } else {
+          // Mode ③: Drop intersecting condition -> a // b // c
+          const pA1 = new THREE.Vector3(-1.35, 0.03, -1.35);
+          const pA2 = new THREE.Vector3(-1.35, 0.03, 1.35);
+          const pB1 = new THREE.Vector3(-2.75, 0.03, -1.35);
+          const pB2 = new THREE.Vector3(-2.75, 0.03, 1.35);
+          dynamicAlpha.add(makeSegMesh(pA1, pA2, 0.036, 0x0d7a72));
+          dynamicAlpha.add(makeSegMesh(pB1, pB2, 0.036, 0x1e293b));
+
+          lineC.visible = true;
+          pointP.visible = false;
+
+          labelAnchors.push(
+            { text: 'a', color: '#0d7a72', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-1.35, 0.05, 1.52)) },
+            { text: 'b', color: '#0f172a', pos: () => alphaPivot.localToWorld(new THREE.Vector3(-2.75, 0.05, 1.52)) },
+            { text: 'c', color: '#dc2626', pos: () => new THREE.Vector3(1.85, -0.74, 2.22) }
+          );
+        }
+      }
+
+      function applyTilt(t) {
+        // t = 0 => parallel (y = +0.85, rotZ = 0); t = 1 => intersecting along c (y = -0.75, rotZ = -0.44 rad)
+        alphaPivot.position.y = 0.85 * (1 - t) + (-0.75) * t;
+        alphaPivot.rotation.z = -0.46 * t;
+      }
+
+      function updateLabels(w, h) {
+        m3LabelsEl.innerHTML = '';
+        scene.updateMatrixWorld(true);
+        labelAnchors.forEach(item => {
+          const v = item.pos().clone().project(camera);
+          if (v.z > 1) return;
+          const x = (v.x * 0.5 + 0.5) * w;
+          const y = (-v.y * 0.5 + 0.5) * h;
+          const el = document.createElement('span');
+          el.className = 'lbl-3d';
+          el.textContent = item.text;
+          el.style.color = item.color;
+          el.style.left = x + 'px';
+          el.style.top = y + 'px';
+          m3LabelsEl.appendChild(el);
+        });
+      }
+
+      function render() {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        const x = state.dist * Math.cos(state.el) * Math.sin(state.az);
+        const y = state.dist * Math.sin(state.el);
+        const z = state.dist * Math.cos(state.el) * Math.cos(state.az);
+        camera.position.set(x, y, z);
+        camera.lookAt(-0.1, -0.1, 0);
+        applyTilt(m3TiltCurrent);
+        renderer.render(scene, camera);
+        updateLabels(rect.width, rect.height);
+      }
+
+      function animateToTarget() {
+        if (m3AnimId) cancelAnimationFrame(m3AnimId);
+        const tick = () => {
+          const diff = m3TiltTarget - m3TiltCurrent;
+          if (Math.abs(diff) < 0.01) {
+            m3TiltCurrent = m3TiltTarget;
+            render();
+            m3AnimId = null;
+            return;
+          }
+          m3TiltCurrent += diff * 0.16;
+          render();
+          m3AnimId = requestAnimationFrame(tick);
+        };
+        m3AnimId = requestAnimationFrame(tick);
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true; state.lx = e.clientX; state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.az -= (e.clientX - state.lx) * 0.01;
+        state.el = Math.max(-1.48, Math.min(1.48, state.el + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX; state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.dist = Math.max(4.2, Math.min(16, state.dist + e.deltaY * 0.008));
+        render();
+      }, { passive: false });
+      if (canvasResizeObserver && box) canvasResizeObserver.observe(box);
+
+      rebuildModeGeometry();
+      const api = {
+        render,
+        reset: () => { state.az = 0.36; state.el = 0.38; state.dist = 7.8; render(); },
+        zoom: (delta) => { state.dist = Math.max(5.5, Math.min(14.5, state.dist + delta)); render(); },
+        setMode: (mode) => {
+          m3Mode = mode;
+          m3TiltTarget = mode === 1 ? 0 : 1;
+          rebuildModeGeometry();
+          document.querySelectorAll('#m3-modes .mode-btn').forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.mode, 10) === mode);
+          });
+          if (mode === 1) {
+            m3StatusDot.classList.remove('red');
+            m3StatusEl.innerHTML = '<span class="math">a, b</span> cắt nhau tại <span class="math">M</span>, cùng song song với <span class="math">(β) ⇒ (α) // (β)</span>';
+          } else if (mode === 0) {
+            m3StatusDot.classList.add('red');
+            m3StatusEl.innerHTML = 'Giả sử <span class="math">(α) ∩ (β) = c</span> thì <span class="math">a // c</span>; nhưng <span class="math">b</span> qua <span class="math">M</span> cắt <span class="math">(β)</span> tại <span class="math">P</span>, trái với <span class="math">b // (β) ⇒</span> mâu thuẫn';
+          } else {
+            m3StatusDot.classList.add('red');
+            m3StatusEl.innerHTML = '<span class="math">a // b // c ⇒ a // (β), b // (β)</span> nhưng <span class="math">(α)</span> vẫn cắt <span class="math">(β)</span> theo giao tuyến <span class="math">c</span>';
+          }
+          animateToTarget();
+        }
+      };
+      all3DScenes.push(api);
+      return api;
+    })();
+
+    document.getElementById('m3-reset').addEventListener('click', () => sceneM3.reset());
+    document.getElementById('m3-zoom-in').addEventListener('click', () => sceneM3.zoom(-1.1));
+    document.getElementById('m3-zoom-out').addEventListener('click', () => sceneM3.zoom(1.1));
+    document.querySelectorAll('#m3-modes .mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => sceneM3.setMode(parseInt(btn.dataset.mode, 10)));
+    });
+
+    // Synchronize Mục 3 proof stepper (◀ Lùi / Lập luận tiếp ▶) with 3D model!
+    (() => {
+      const items = document.querySelectorAll('#m3-steps .step-item');
+      const prev = document.getElementById('m3-prev-step');
+      const next = document.getElementById('m3-next-step');
+      // Clone buttons to remove old generic listeners from initProofStepper
+      const prevNew = prev.cloneNode(true);
+      const nextNew = next.cloneNode(true);
+      prev.parentNode.replaceChild(prevNew, prev);
+      next.parentNode.replaceChild(nextNew, next);
+
+      let step = 0; // 0 = initial, 1 = step 1 active, 2 = step 2 active, 3 = step 3 active
+      function syncM3Step() {
+        items.forEach((el, i) => {
+          el.classList.remove('active', 'done');
+          if (i + 1 === step) el.classList.add('active');
+          else if (i + 1 < step) el.classList.add('done');
+        });
+        prevNew.disabled = step === 0;
+        nextNew.disabled = step === items.length;
+        // Auto-sync 3D scene to match the exact proof step (Screenshots 1 -> 2 -> 3 -> 4)
+        if (step === 1 || step === 2) sceneM3.setMode(0);
+        else sceneM3.setMode(1);
+      }
+      prevNew.addEventListener('click', () => { if (step > 0) { step--; syncM3Step(); } });
+      nextNew.addEventListener('click', () => { if (step < items.length) { step++; syncM3Step(); } });
+      items.forEach((el, i) => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => { step = i + 1; syncM3Step(); });
+      });
+      syncM3Step();
+    })();
+
+    /* ================= HELPER: 3D SEGMENT & LABELS FOR THREE.JS ================= */
+    function make3DSeg(p1, p2, r, colorHex) {
+      const dir = new THREE.Vector3().subVectors(p2, p1);
+      const len = dir.length();
+      if (len < 0.001) return new THREE.Group();
+      const geo = new THREE.CylinderGeometry(r, r, len, 12);
+      const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: colorHex }));
+      mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+      return mesh;
+    }
+    function make3DTriangle(p1, p2, p3, colorHex, opacity) {
+      const geo = new THREE.BufferGeometry().setFromPoints([p1, p2, p3]);
+      geo.computeVertexNormals();
+      const mat = new THREE.MeshBasicMaterial({ color: colorHex, transparent: true, opacity, side: THREE.DoubleSide, depthWrite: false });
+      return new THREE.Mesh(geo, mat);
+    }
+    function make3DQuad(p1, p2, p3, p4, colorHex, opacity) {
+      const geo = new THREE.BufferGeometry().setFromPoints([p1, p2, p3, p1, p3, p4]);
+      geo.computeVertexNormals();
+      const mat = new THREE.MeshBasicMaterial({ color: colorHex, transparent: true, opacity, side: THREE.DoubleSide, depthWrite: false });
+      return new THREE.Mesh(geo, mat);
+    }
+    function createLabeledThreeScene(canvasId, labelsId, defaultAz, defaultEl, defaultDist, buildFn) {
+      const canvas = document.getElementById(canvasId);
+      const labelsEl = document.getElementById(labelsId);
+      const box = canvas.parentElement;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(34, 1.4, 0.1, 100);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.82));
+      const dl = new THREE.DirectionalLight(0xffffff, 0.65);
+      dl.position.set(5, 10, 7);
+      scene.add(dl);
+
+      const state = { az: defaultAz, el: defaultEl, dist: defaultDist, dragging: false, lx: 0, ly: 0 };
+      const contentApi = buildFn(scene);
+
+      function render() {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        camera.position.set(
+          state.dist * Math.cos(state.el) * Math.sin(state.az),
+          state.dist * Math.sin(state.el),
+          state.dist * Math.cos(state.el) * Math.cos(state.az)
+        );
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+
+        if (labelsEl && contentApi && contentApi.getLabels) {
+          labelsEl.innerHTML = '';
+          scene.updateMatrixWorld(true);
+          contentApi.getLabels().forEach(item => {
+            const v = item.pos.clone().project(camera);
+            if (v.z > 1) return;
+            const el = document.createElement('span');
+            el.className = 'lbl-3d';
+            el.textContent = item.text;
+            el.style.color = item.color || '#0f172a';
+            el.style.left = ((v.x * 0.5 + 0.5) * rect.width) + 'px';
+            el.style.top = ((-v.y * 0.5 + 0.5) * rect.height) + 'px';
+            labelsEl.appendChild(el);
+          });
+        }
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true; state.lx = e.clientX; state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.az -= (e.clientX - state.lx) * 0.01;
+        state.el = Math.max(-1.48, Math.min(1.48, state.el + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX; state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.dist = Math.max(4.2, Math.min(16, state.dist + e.deltaY * 0.008));
+        render();
+      }, { passive: false });
+      if (canvasResizeObserver && box) canvasResizeObserver.observe(box);
+
+      const api = {
+        render,
+        reset: () => { state.az = defaultAz; state.el = defaultEl; state.dist = defaultDist; render(); },
+        zoom: (d) => { state.dist = Math.max(4.2, Math.min(16, state.dist + d)); render(); },
+        content: contentApi
+      };
+      all3DScenes.push(api);
+      return api;
+    }
+
+    /* ================= 4. VÍ DỤ 1 (THREE.JS 3D — PHÉP CHIẾU SONG SONG ORTHOGRAPHIC 360°) ================= */
+    const sceneVd1 = (() => {
+      const canvas = document.getElementById('canvas-vd1');
+      const labelsEl = document.getElementById('vd1-labels');
+      const box = canvas.parentElement;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      // Dùng OrthographicCamera (phép chiếu song song) để bảo toàn tuyệt đối tính song song & bằng nhau ở mọi góc quay 360°!
+      const camera = new THREE.OrthographicCamera(-3, 3, 2, -2, -50, 50);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+      const dl = new THREE.DirectionalLight(0xffffff, 0.6);
+      dl.position.set(5, 10, 7);
+      scene.add(dl);
+
+      // Dựng chính xác theo vectơ: AB = DC = FE, BC = AD, BE = AF
+      const A = new THREE.Vector3(-1.25, -0.65, -0.55);
+      const vecAB = new THREE.Vector3(2.5, 0, 0);
+      const vecAD = new THREE.Vector3(-0.65, 0, 1.75);
+      const vecAF = new THREE.Vector3(0.45, 1.75, -0.45);
+
+      const B = A.clone().add(vecAB);
+      const D = A.clone().add(vecAD);
+      const C = B.clone().add(vecAD);
+      const F = A.clone().add(vecAF);
+      const E = B.clone().add(vecAF);
+
+      scene.add(make3DTriangle(A, D, F, 0x2563eb, 0.30));
+      scene.add(make3DTriangle(B, C, E, 0x0d7a72, 0.30));
+      scene.add(make3DQuad(A, B, C, D, 0xea580c, 0.12));
+      scene.add(make3DQuad(A, B, E, F, 0x6366f1, 0.12));
+
+      [
+        [A, B, 0x334155, 0.042], [D, C, 0x334155, 0.038], [F, E, 0x334155, 0.038],
+        [A, D, 0x2563eb, 0.042], [A, F, 0x2563eb, 0.042], [D, F, 0x2563eb, 0.034],
+        [B, C, 0x0d7a72, 0.042], [B, E, 0x0d7a72, 0.042], [C, E, 0x0d7a72, 0.034]
+      ].forEach(([p1, p2, c, r]) => scene.add(make3DSeg(p1, p2, r, c)));
+
+      const pts = [['A', A], ['B', B], ['C', C], ['D', D], ['E', E], ['F', F]];
+      pts.forEach(([, p]) => {
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 16), new THREE.MeshBasicMaterial({ color: 0x0f172a }));
+        dot.position.copy(p);
+        scene.add(dot);
+      });
+
+      const state = { az: 0.52, el: 0.34, zoom: 1.0, dragging: false, lx: 0, ly: 0 };
+
+      function render() {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        renderer.setSize(rect.width, rect.height, false);
+        const aspect = rect.width / rect.height;
+        const frustum = 4.6 / state.zoom;
+        camera.left = (-frustum * aspect) / 2;
+        camera.right = (frustum * aspect) / 2;
+        camera.top = frustum / 2;
+        camera.bottom = -frustum / 2;
+        camera.updateProjectionMatrix();
+
+        const r = 10;
+        camera.position.set(
+          r * Math.cos(state.el) * Math.sin(state.az),
+          r * Math.sin(state.el),
+          r * Math.cos(state.el) * Math.cos(state.az)
+        );
+        camera.lookAt(0, 0.1, 0.15);
+        renderer.render(scene, camera);
+
+        if (labelsEl) {
+          labelsEl.innerHTML = '';
+          scene.updateMatrixWorld(true);
+          pts.forEach(([t, p]) => {
+            const v = p.clone().add(new THREE.Vector3(0, 0.24, 0)).project(camera);
+            const el = document.createElement('span');
+            el.className = 'lbl-3d';
+            el.textContent = t;
+            el.style.color = '#0f172a';
+            el.style.left = ((v.x * 0.5 + 0.5) * rect.width) + 'px';
+            el.style.top = ((-v.y * 0.5 + 0.5) * rect.height) + 'px';
+            labelsEl.appendChild(el);
+          });
+        }
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        state.dragging = true; state.lx = e.clientX; state.ly = e.clientY;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!state.dragging) return;
+        state.az -= (e.clientX - state.lx) * 0.01;
+        state.el = Math.max(-1.48, Math.min(1.48, state.el + (e.clientY - state.ly) * 0.01));
+        state.lx = e.clientX; state.ly = e.clientY;
+        render();
+      });
+      canvas.addEventListener('pointerup', () => { state.dragging = false; });
+      canvas.addEventListener('pointercancel', () => { state.dragging = false; });
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        state.zoom = Math.max(0.55, Math.min(2.2, state.zoom - e.deltaY * 0.001));
+        render();
+      }, { passive: false });
+      if (canvasResizeObserver && box) canvasResizeObserver.observe(box);
+
+      const api = {
+        render,
+        reset: () => { state.az = 0.52; state.el = 0.34; state.zoom = 1.0; render(); },
+        zoom: (d) => { state.zoom = Math.max(0.55, Math.min(2.2, state.zoom + d)); render(); }
+      };
+      all3DScenes.push(api);
+      return api;
+    })();
+    document.getElementById('vd1-reset').addEventListener('click', () => sceneVd1.reset());
+    document.getElementById('vd1-zoom-in').addEventListener('click', () => sceneVd1.zoom(0.18));
+    document.getElementById('vd1-zoom-out').addEventListener('click', () => sceneVd1.zoom(-0.18));
+
+    /* ================= 5. LUYỆN TẬP 1 (THREE.JS 3D — 360°) ================= */
+    const lt1PlanesEl = document.getElementById('lt1-planes');
+    const sceneLt1 = createLabeledThreeScene('canvas-lt1', 'lt1-labels', 0.48, 0.36, 7.2, (scene) => {
+      const A = new THREE.Vector3(0, 1.25, 0);
+      const B = new THREE.Vector3(-1.45, -0.95, -0.45);
+      const C = new THREE.Vector3(1.55, -0.95, -0.25);
+      const D = new THREE.Vector3(-0.2, -0.95, 1.45);
+
+      const planesGrp = new THREE.Group();
+      planesGrp.add(make3DTriangle(B, C, D, 0xea580c, 0.24));
+      const topPl = makePlaneWithBorder(3.8, 2.6, 0x0d7a72, 0.20);
+      topPl.rotation.x = -Math.PI / 2;
+      topPl.position.set(0, 1.25, 0);
+      planesGrp.add(topPl);
+      scene.add(planesGrp);
+
+      [[B,C,0xea580c],[B,D,0xea580c],[C,D,0xea580c],[A,B,0x94a3b8],[A,C,0x94a3b8],[A,D,0x94a3b8]]
+        .forEach(([p1,p2,c]) => scene.add(make3DSeg(p1, p2, c === 0xea580c ? 0.036 : 0.022, c)));
+
+      // m // BC and n // BD through A
+      const dirBC = new THREE.Vector3().subVectors(C, B).normalize().multiplyScalar(1.75);
+      const dirBD = new THREE.Vector3().subVectors(D, B).normalize().multiplyScalar(1.55);
+      const m1 = A.clone().sub(dirBC), m2 = A.clone().add(dirBC);
+      const n1 = A.clone().sub(dirBD), n2 = A.clone().add(dirBD);
+      scene.add(make3DSeg(m1, m2, 0.04, 0x0d7a72));
+      scene.add(make3DSeg(n1, n2, 0.04, 0xe11d48));
+
+      const pts = [['A',A],['B',B],['C',C],['D',D]];
+      pts.forEach(([,p]) => {
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 16), new THREE.MeshBasicMaterial({ color: 0x0f172a }));
+        dot.position.copy(p);
+        scene.add(dot);
+      });
+      return {
+        setShowPlanes: (v) => { planesGrp.visible = v; },
+        getLabels: () => [
+          ...pts.map(([t, p]) => ({ text: t, pos: p.clone().add(new THREE.Vector3(0, 0.24, 0)), color: '#0f172a' })),
+          { text: 'm', pos: m2.clone().add(new THREE.Vector3(0.15, 0.12, 0)), color: '#0d7a72' },
+          { text: 'n', pos: n2.clone().add(new THREE.Vector3(0.15, 0.12, 0)), color: '#e11d48' }
+        ]
+      };
+    });
+    document.getElementById('lt1-reset').addEventListener('click', () => sceneLt1.reset());
+    document.getElementById('lt1-zoom-in').addEventListener('click', () => sceneLt1.zoom(-1.0));
+    document.getElementById('lt1-zoom-out').addEventListener('click', () => sceneLt1.zoom(1.0));
+    lt1PlanesEl.addEventListener('change', () => {
+      sceneLt1.content.setShowPlanes(lt1PlanesEl.checked);
+      sceneLt1.render();
+    });
+
+    /* ================= 6. TABLE 3D (H.4.43 — THREE.JS 360°) ================= */
+    const tblAngleEl = document.getElementById('tbl-angle');
+    const tblAngleVal = document.getElementById('tbl-angle-val');
+    const tblTopEl = document.getElementById('tbl-top');
+    const tblEdgesEl = document.getElementById('tbl-edges');
+    const tblStatusEl = document.getElementById('tbl-status');
+    let tblSpinning = false, tblSpinId = null;
+
+    const sceneTbl = createLabeledThreeScene('canvas-tbl', 'tbl-labels', 0.56, 0.36, 7.6, (scene) => {
+      // Floor (Q)
+      const floor = makePlaneWithBorder(5.2, 4.0, 0xea580c, 0.14);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.set(0, -1.05, 0);
+      scene.add(floor);
+
+      // Frame 1 (fixed along X)
+      const f1Grp = new THREE.Group();
+      const frameColor = 0x475569;
+      f1Grp.add(make3DSeg(new THREE.Vector3(-1.6, -1.05, 0), new THREE.Vector3(-1.6, 0.85, 0), 0.04, frameColor));
+      f1Grp.add(make3DSeg(new THREE.Vector3(1.6, -1.05, 0), new THREE.Vector3(1.6, 0.85, 0), 0.04, frameColor));
+      const aTop = make3DSeg(new THREE.Vector3(-1.6, 0.85, 0), new THREE.Vector3(1.6, 0.85, 0), 0.052, 0x0d7a72);
+      const aBot = make3DSeg(new THREE.Vector3(-1.6, -1.05, 0), new THREE.Vector3(1.6, -1.05, 0), 0.046, 0x0d7a72);
+      f1Grp.add(aTop, aBot);
+      scene.add(f1Grp);
+
+      // Frame 2 (rotates around Y axis)
+      const f2Grp = new THREE.Group();
+      f2Grp.add(make3DSeg(new THREE.Vector3(-1.6, -1.05, 0), new THREE.Vector3(-1.6, 0.85, 0), 0.04, frameColor));
+      f2Grp.add(make3DSeg(new THREE.Vector3(1.6, -1.05, 0), new THREE.Vector3(1.6, 0.85, 0), 0.04, frameColor));
+      const bTop = make3DSeg(new THREE.Vector3(-1.6, 0.85, 0), new THREE.Vector3(1.6, 0.85, 0), 0.052, 0xe11d48);
+      const bBot = make3DSeg(new THREE.Vector3(-1.6, -1.05, 0), new THREE.Vector3(1.6, -1.05, 0), 0.046, 0xe11d48);
+      f2Grp.add(bTop, bBot);
+      scene.add(f2Grp);
+
+      // Central pivot axis
+      scene.add(make3DSeg(new THREE.Vector3(0, -1.05, 0), new THREE.Vector3(0, 0.85, 0), 0.048, 0x0f172a));
+
+      // Tabletop (P)
+      const topGrp = new THREE.Group();
+      topGrp.position.set(0, 0.88, 0);
+      const topMesh = makePlaneWithBorder(4.2, 3.0, 0x2563eb, 0.24);
+      topMesh.rotation.x = -Math.PI / 2;
+      topGrp.add(topMesh);
+      scene.add(topGrp);
+
+      let curRad = (55 * Math.PI) / 180;
+      function update() {
+        const deg = parseFloat(tblAngleEl.value);
+        curRad = (deg * Math.PI) / 180;
+        f2Grp.rotation.y = curRad;
+        topGrp.visible = tblTopEl.checked;
+        topGrp.rotation.x = deg === 0 ? 0.28 : 0;
+
+        const hi = tblEdgesEl.checked;
+        aTop.material.color.setHex(hi ? 0x0d7a72 : frameColor);
+        aBot.material.color.setHex(hi ? 0x0d7a72 : frameColor);
+        bTop.material.color.setHex(hi ? 0xe11d48 : frameColor);
+        bBot.material.color.setHex(hi ? 0xe11d48 : frameColor);
+
+        tblAngleVal.textContent = Math.round(deg) + '°';
+        tblStatusEl.textContent = deg === 0 ? 'Góc 0° · Không đủ điều kiện (mặt bàn có thể nghiêng)' : `Góc ${Math.round(deg)}° · (P) // (Q)`;
+        tblStatusEl.classList.toggle('warn', deg === 0);
+      }
+      update();
+      return {
+        update,
+        getLabels: () => {
+          const list = [
+            { text: '(Q)', pos: new THREE.Vector3(-2.25, -1.0, 1.7), color: '#ea580c' }
+          ];
+          if (tblTopEl.checked) list.push({ text: '(P)', pos: new THREE.Vector3(-1.85, 1.0, 1.2), color: '#2563eb' });
+          if (tblEdgesEl.checked) {
+            list.push(
+              { text: 'a', pos: new THREE.Vector3(1.75, 0.92, 0), color: '#0d7a72' },
+              { text: "a'", pos: new THREE.Vector3(1.75, -0.95, 0), color: '#0d7a72' },
+              { text: 'b', pos: new THREE.Vector3(1.75 * Math.cos(curRad), 0.92, -1.75 * Math.sin(curRad)), color: '#e11d48' },
+              { text: "b'", pos: new THREE.Vector3(1.75 * Math.cos(curRad), -0.95, -1.75 * Math.sin(curRad)), color: '#e11d48' }
+            );
+          }
+          return list;
+        }
+      };
+    });
+    document.getElementById('tbl-reset').addEventListener('click', () => sceneTbl.reset());
+    document.getElementById('tbl-zoom-in').addEventListener('click', () => sceneTbl.zoom(-1.0));
+    document.getElementById('tbl-zoom-out').addEventListener('click', () => sceneTbl.zoom(1.0));
+    function updateTbl() { sceneTbl.content.update(); sceneTbl.render(); }
+    tblAngleEl.addEventListener('input', updateTbl);
+    tblTopEl.addEventListener('change', updateTbl);
+    tblEdgesEl.addEventListener('change', updateTbl);
+    const tblSpinBtn = document.getElementById('tbl-spin');
+    tblSpinBtn.addEventListener('click', () => {
+      tblSpinning = !tblSpinning;
+      tblSpinBtn.textContent = tblSpinning ? '⏸ Dừng' : '▶ Xoay khung';
+      if (tblSpinning) {
+        let dir = 1;
+        const loop = () => {
+          if (!tblSpinning) return;
+          let v = parseFloat(tblAngleEl.value) + dir * 0.8;
+          if (v >= 90) { v = 90; dir = -1; }
+          if (v <= 10) { v = 10; dir = 1; }
+          tblAngleEl.value = v;
+          updateTbl();
+          tblSpinId = requestAnimationFrame(loop);
+        };
+        tblSpinId = requestAnimationFrame(loop);
+      } else if (tblSpinId) {
+        cancelAnimationFrame(tblSpinId);
+      }
+    });
+
+    /* ================= 2D STEP-BY-STEP DRAWING ENGINE ================= */
+    function createStepDrawer(prefix, totalSteps, drawStepFn) {
+      const canvas = document.getElementById('canvas-draw-' + prefix);
+      const ctx = canvas.getContext('2d');
+      const dotsEl = document.getElementById('draw-' + prefix + '-dots');
+      const prevBtn = document.getElementById('draw-' + prefix + '-prev');
+      const nextBtn = document.getElementById('draw-' + prefix + '-next');
+      const autoBtn = document.getElementById('draw-' + prefix + '-auto');
+      const resetBtn = document.getElementById('draw-' + prefix + '-reset');
+      let step = totalSteps, timer = null, zoom = 1.0;
+      const zInBtn = document.getElementById('draw-' + prefix + '-zoom-in');
+      const zOutBtn = document.getElementById('draw-' + prefix + '-zoom-out');
+
+      dotsEl.innerHTML = '';
+      for (let i = 1; i <= totalSteps; i++) {
+        const d = document.createElement('span');
+        d.className = 'dot';
+        dotsEl.appendChild(d);
+      }
+      const dots = dotsEl.querySelectorAll('.dot');
+
+      function render() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+          canvas.width = Math.round(rect.width * dpr);
+          canvas.height = Math.round(rect.height * dpr);
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        ctx.save();
+        ctx.translate(rect.width / 2, rect.height / 2);
+        ctx.scale(zoom, zoom);
+        ctx.translate(-rect.width / 2, -rect.height / 2);
+        drawStepFn(ctx, rect.width, rect.height, step);
+        ctx.restore();
+        dots.forEach((d, i) => d.classList.toggle('active', i < step));
+        prevBtn.disabled = step <= 1;
+        nextBtn.disabled = step >= totalSteps;
+      }
+
+      prevBtn.addEventListener('click', () => { if (step > 1) { step--; render(); } });
+      nextBtn.addEventListener('click', () => { if (step < totalSteps) { step++; render(); } });
+      resetBtn.addEventListener('click', () => { if (timer) clearInterval(timer); step = 1; zoom = 1.0; render(); });
+      if (zInBtn) zInBtn.addEventListener('click', () => { zoom = Math.min(2.0, zoom + 0.18); render(); });
+      if (zOutBtn) zOutBtn.addEventListener('click', () => { zoom = Math.max(0.6, zoom - 0.18); render(); });
+      autoBtn.addEventListener('click', () => {
+        if (timer) clearInterval(timer);
+        step = 1; render();
+        timer = setInterval(() => {
+          if (step >= totalSteps) { clearInterval(timer); timer = null; return; }
+          step++; render();
+        }, 900);
+      });
+      return { render };
+    }
+
+    const drawM2 = createStepDrawer('m2', 4, (ctx, w, h, st) => {
+      const cx = w / 2, cy = h / 2;
+      if (st >= 1) {
+        drawPoly(ctx, [{x:cx-110,y:cy-40},{x:cx+80,y:cy-40},{x:cx+115,y:cy-5},{x:cx-75,y:cy-5}], 'rgba(37,99,235,0.12)', '#2563eb');
+        drawLabel(ctx, {x:cx-95,y:cy-12}, '(α)', '#2563eb', 0, 0);
+      }
+      if (st >= 2) {
+        drawPoly(ctx, [{x:cx-110,y:cy+25},{x:cx+80,y:cy+25},{x:cx+115,y:cy+60},{x:cx-75,y:cy+60}], 'rgba(234,88,12,0.12)', '#ea580c');
+        drawLabel(ctx, {x:cx-95,y:cy+52}, '(β)', '#ea580c', 0, 0);
+      }
+      if (st >= 3) {
+        drawSeg(ctx, {x:cx-55,y:cy-22}, {x:cx+65,y:cy-22}, '#0d7a72', 2.2);
+        drawLabel(ctx, {x:cx+70,y:cy-18}, 'd', '#0d7a72', 0, 0);
+      }
+      if (st >= 4) {
+        ctx.font = '600 12.5px Inter, sans-serif';
+        ctx.fillStyle = '#0d7a72';
+        ctx.fillText('(α) // (β) và d ⊂ (α) ⇒ d // (β)', cx - 95, cy + 88);
+      }
+    });
+
+    const drawM3 = createStepDrawer('m3', 5, (ctx, w, h, st) => {
+      const cx = w / 2, cy = h / 2;
+      if (st >= 1) {
+        drawPoly(ctx, [{x:cx-120,y:cy-55},{x:cx+85,y:cy-55},{x:cx+120,y:cy-10},{x:cx-85,y:cy-10}], 'rgba(37,99,235,0.12)', '#2563eb');
+        drawLabel(ctx, {x:cx-105,y:cy-22}, '(α)', '#2563eb', 0, 0);
+      }
+      if (st >= 2) {
+        drawPoly(ctx, [{x:cx-120,y:cy+25},{x:cx+85,y:cy+25},{x:cx+120,y:cy+70},{x:cx-85,y:cy+70}], 'rgba(234,88,12,0.12)', '#ea580c');
+        drawLabel(ctx, {x:cx-105,y:cy+58}, '(β)', '#ea580c', 0, 0);
+      }
+      if (st >= 3) {
+        drawSeg(ctx, {x:cx-65,y:cy-32}, {x:cx+75,y:cy-32}, '#0d7a72', 2.2);
+        drawLabel(ctx, {x:cx+80,y:cy-28}, 'a', '#0d7a72', 0, 0);
+      }
+      if (st >= 4) {
+        drawSeg(ctx, {x:cx-35,y:cy-48}, {x:cx+45,y:cy-16}, '#e11d48', 2.2);
+        drawDot(ctx, {x:cx+5,y:cy-32}, '#0f172a', 3.5);
+        drawLabel(ctx, {x:cx+10,y:cy-38}, 'M', '#0f172a', 0, 0);
+        drawLabel(ctx, {x:cx+50,y:cy-14}, 'b', '#e11d48', 0, 0);
+      }
+      if (st >= 5) {
+        drawSeg(ctx, {x:cx-65,y:cy+48}, {x:cx+75,y:cy+48}, '#64748b', 1.6, [5, 4]);
+        drawLabel(ctx, {x:cx+80,y:cy+52}, 'c (giả sử)', '#64748b', 0, 0);
+      }
+    });
+
+    const drawVd1 = createStepDrawer('vd1', 5, (ctx, w, h, st) => {
+      const cx = w / 2, cy = h / 2;
+      const A={x:cx-50,y:cy+15}, B={x:cx+45,y:cy+15}, D={x:cx-85,y:cy+55}, C={x:cx+10,y:cy+55};
+      const F={x:cx-30,y:cy-55}, E={x:cx+65,y:cy-55};
+      if (st >= 1) { drawSeg(ctx, A, B, '#475569', 1.8); drawSeg(ctx, A, D, '#2563eb', 2); drawSeg(ctx, D, C, '#475569', 1.8); drawSeg(ctx, B, C, '#0d7a72', 2); }
+      if (st >= 2) { drawSeg(ctx, A, F, '#2563eb', 2); drawSeg(ctx, B, E, '#0d7a72', 2); drawSeg(ctx, F, E, '#475569', 1.8); }
+      if (st >= 3) { drawSeg(ctx, D, F, '#2563eb', 1.8, [5, 4]); drawPoly(ctx, [A, D, F], 'rgba(37,99,235,0.16)', null); }
+      if (st >= 4) { drawSeg(ctx, C, E, '#0d7a72', 2); drawPoly(ctx, [B, C, E], 'rgba(13,122,114,0.18)', null); }
+      if (st >= 5) {
+        [['A',A,-14,4],['B',B,6,4],['C',C,6,12],['D',D,-14,12],['E',E,6,-6],['F',F,-14,-6]].forEach(([t,p,dx,dy]) => {
+          drawDot(ctx, p, '#0f172a', 3); drawLabel(ctx, p, t, '#0f172a', dx, dy);
+        });
+      }
+    });
+
+    const LT1_STEP_DESCS = [
+      'Vẽ tam giác đáy <span class="math">BCD</span> với cạnh <span class="math">BC, CD</span> nét thấy và cạnh <span class="math">BD</span> nét khuất.',
+      'Lấy điểm <span class="math">A</span> ngoài mặt phẳng <span class="math">(BCD)</span>, nối <span class="math">AB, AC, AD</span> tạo tứ diện <span class="math">ABCD</span>.',
+      'Qua <span class="math">A</span> vẽ đường thẳng <span class="math">m // BC</span> (màu cam).',
+      'Qua <span class="math">A</span> vẽ đường thẳng <span class="math">n // BD</span> (màu xanh dương).',
+      'Vẽ hình bình hành có các cạnh song song với <span class="math">m, n</span> để biểu diễn <span class="math-rm">mp</span><span class="math">(m, n)</span>.'
+    ];
+    const drawLt1 = createStepDrawer('lt1', 5, (ctx, w, h, st) => {
+      const tagEl = document.getElementById('draw-lt1-step-tag');
+      const descEl = document.getElementById('draw-lt1-step-desc');
+      if (tagEl) tagEl.textContent = `BƯỚC ${st}/5`;
+      if (descEl) descEl.innerHTML = LT1_STEP_DESCS[st - 1] || '';
+
+      // Tọa độ chuẩn tỉ lệ theo hình mẫu (tự co giãn theo kích thước khung)
+      const s = Math.min(w / 360, h / 250);
+      const ox = w / 2, oy = h * 0.56;
+      const pt = (x, y) => ({ x: ox + x * s, y: oy + y * s });
+
+      const A = pt(-24, -76);
+      const B = pt(-76, 68);
+      const C = pt(104, 84);
+      const D = pt(62, 14);
+
+      // Vectơ chỉ phương u // BC và v // BD (đảm bảo song song chính xác tuyệt đối!)
+      const uLen = Math.hypot(C.x - B.x, C.y - B.y);
+      const ux = (C.x - B.x) / uLen, uy = (C.y - B.y) / uLen;
+      const vLen = Math.hypot(D.x - B.x, D.y - B.y);
+      const vx = (D.x - B.x) / vLen, vy = (D.y - B.y) / vLen;
+
+      // Bước 5: Hình bình hành biểu diễn mp(m, n) có các cạnh song song với m và n (vẽ trước để nằm dưới nét đậm)
+      if (st >= 5) {
+        const halfU = 128 * s, halfV = 78 * s;
+        const pCenter = { x: A.x + 22 * s * ux + 10 * s * vx, y: A.y + 22 * s * uy + 10 * s * vy };
+        const p1 = { x: pCenter.x - halfU * ux - halfV * vx, y: pCenter.y - halfU * uy - halfV * vy };
+        const p2 = { x: pCenter.x + halfU * ux - halfV * vx, y: pCenter.y + halfU * uy - halfV * vy };
+        const p3 = { x: pCenter.x + halfU * ux + halfV * vx, y: pCenter.y + halfU * uy + halfV * vy };
+        const p4 = { x: pCenter.x - halfU * ux + halfV * vx, y: pCenter.y - halfU * uy + halfV * vy };
+        drawPoly(ctx, [p1, p2, p3, p4], 'rgba(59, 130, 246, 0.22)', '#0f172a', [], 1.5);
+      }
+
+      // Bước 1: Đáy BCD (BC, CD nét thấy; BD nét khuất)
+      if (st >= 1) {
+        drawSeg(ctx, B, C, '#0f172a', 2.2);
+        drawSeg(ctx, C, D, '#0f172a', 2.2);
+        drawSeg(ctx, B, D, '#0f172a', 2.0, [7, 5]);
+        drawLabel(ctx, B, 'B', '#0f172a', -18, 12);
+        drawLabel(ctx, C, 'C', '#0f172a', 6, 14);
+        drawLabel(ctx, D, 'D', '#0f172a', 8, 6);
+      }
+
+      // Bước 2: Đỉnh A và các cạnh AB, AC, AD
+      if (st >= 2) {
+        drawSeg(ctx, A, B, '#0f172a', 2.2);
+        drawSeg(ctx, A, C, '#0f172a', 2.2);
+        drawSeg(ctx, A, D, '#0f172a', 2.2);
+        drawLabel(ctx, A, 'A', '#0f172a', -12, -12);
+      }
+
+      // Bước 3: Đường thẳng m // BC (màu cam) kéo dài vừa khít hai cạnh viền của hình bình hành mp(m, n)
+      if (st >= 3) {
+        const m1 = { x: A.x - 106 * s * ux, y: A.y - 106 * s * uy };
+        const m2 = { x: A.x + 150 * s * ux, y: A.y + 150 * s * uy };
+        drawSeg(ctx, m1, m2, '#c2410c', 2.6);
+        drawLabel(ctx, m2, 'm', '#c2410c', -16, -10);
+      }
+
+      // Bước 4: Đường thẳng n // BD (màu xanh dương) kéo dài vừa khít hai cạnh viền của hình bình hành mp(m, n)
+      if (st >= 4) {
+        const n1 = { x: A.x - 68 * s * vx, y: A.y - 68 * s * vy };
+        const n2 = { x: A.x + 88 * s * vx, y: A.y + 88 * s * vy };
+        drawSeg(ctx, n1, n2, '#2563eb', 2.6);
+        drawLabel(ctx, n2, 'n', '#2563eb', -14, -8);
+      }
+    });
+
+    function resizeAllDrawers() {
+      drawM2.render(); drawM3.render(); drawVd1.render(); drawLt1.render();
+    }
+    function resizeAllCanvases() {
+      sceneCuc.render(); sceneStairs.render(); sceneRel.render();
+      sceneM3.render(); sceneVd1.render(); sceneLt1.render(); sceneTbl.render();
+      drawM2.render(); drawM3.render(); drawVd1.render(); drawLt1.render();
+    }
+    window.addEventListener('resize', resizeAllCanvases);
+    window.addEventListener('load', resizeAllCanvases);
+
+    /* ================= 8. QUIZ ENGINE ================= */
+    const QUIZ_DATA = [
+      {
+        type: 'mc',
+        q: 'Hai mặt phẳng (α) và (β) được gọi là song song với nhau nếu:',
+        opts: ['A. Chúng không có điểm chung.', 'B. Chúng có một đường thẳng chung.', 'C. Chúng có vô số điểm chung.', 'D. Mọi đường thẳng trong (α) đều cắt (β).'],
+        ans: 0,
+        exp: 'Theo Định nghĩa (Mục 1): hai mặt phẳng (α) và (β) song song với nhau khi và chỉ khi chúng không có điểm chung nào.'
+      },
+      {
+        type: 'mc',
+        q: 'Nếu (α) // (β) và đường thẳng d nằm trong (α) thì vị trí tương đối giữa d và (β) là:',
+        opts: ['A. d cắt (β).', 'B. d // (β).', 'C. d ⊂ (β).', 'D. d chéo (β).'],
+        ans: 1,
+        exp: 'Theo Nhận xét: vì (α) // (β) nên chúng không có điểm chung; mà d ⊂ (α) nên d và (β) cũng không có điểm chung, suy ra d // (β).'
+      },
+      {
+        type: 'mc',
+        q: 'Hai mặt phẳng phân biệt trong không gian có thể có bao nhiêu vị trí tương đối?',
+        opts: ['A. 1 vị trí.', 'B. 3 vị trí.', 'C. 2 vị trí (cắt nhau hoặc song song).', 'D. 4 vị trí.'],
+        ans: 2,
+        exp: 'Hai mặt phẳng bất kì có 3 vị trí tương đối (trùng nhau, cắt nhau, song song). Vì đề cho hai mặt phẳng "phân biệt" nên loại trường hợp trùng nhau, chỉ còn 2 vị trí: cắt nhau hoặc song song.'
+      },
+      {
+        type: 'mc',
+        q: 'Để chứng minh (α) // (β) theo Định lí điều kiện song song, trong (α) ta cần chỉ ra hai đường thẳng a, b thỏa mãn:',
+        opts: ['A. a // b và a // (β).', 'B. a ⊂ (α), b ⊂ (β) và a // b.', 'C. a, b chéo nhau và cùng song song với (β).', 'D. a, b cắt nhau và cùng song song với (β).'],
+        ans: 3,
+        exp: 'Theo Định lí (Mục 2): mặt phẳng (α) phải chứa hai đường thẳng cắt nhau a, b và cả hai đường thẳng này cùng song song với (β) thì (α) // (β).'
+      },
+      {
+        type: 'mc',
+        q: 'Cho hình hộp ABCD.A\'B\'C\'D\'. Mặt phẳng (ABCD) song song với mặt phẳng nào sau đây?',
+        opts: ['A. (A\'B\'C\'D\').', 'B. (ABB\'A\').', 'C. (BCC\'B\').', 'D. (ACC\'A\').'],
+        ans: 0,
+        exp: 'Trong hình hộp, AB // A\'B\' và AD // A\'D\'. Hai đường thẳng cắt nhau AB, AD trong (ABCD) cùng song song với (A\'B\'C\'D\') nên (ABCD) // (A\'B\'C\'D\').'
+      },
+      {
+        type: 'mc',
+        q: 'Nếu mặt phẳng (α) chứa hai đường thẳng phân biệt a, b song song với nhau và cùng song song với (β) thì:',
+        opts: ['A. Chắc chắn (α) // (β).', 'B. Chắc chắn (α) cắt (β).', 'C. (α) có thể song song hoặc cắt (β).', 'D. (α) trùng (β).'],
+        ans: 2,
+        exp: 'Thiếu điều kiện "hai đường thẳng cắt nhau". Nếu (α) cắt (β) theo giao tuyến c, ta vẫn lấy được a // b // c trong (α) thỏa mãn a // (β) và b // (β). Do đó (α) có thể song song hoặc cắt (β).'
+      },
+      {
+        type: 'mc',
+        q: 'Cho hai hình bình hành ABCD và ABEF không đồng phẳng. Khẳng định nào sau đây đúng?',
+        opts: ['A. (ABCD) // (ABEF).', 'B. (BCE) // (ADF).', 'C. (ABE) // (CDF).', 'D. (ACE) // (BDF).'],
+        ans: 1,
+        exp: 'Theo Ví dụ 1: BC // AD ⇒ BC // (ADF) và BE // AF ⇒ BE // (ADF). Vì BC, BE cắt nhau tại B trong (BCE) nên (BCE) // (ADF).'
+      },
+      {
+        type: 'mc',
+        q: 'Trong thực tế, chiếc bàn có hai khung chân hình chữ nhật xoay quanh một trục luôn giữ mặt bàn song song với mặt đất nhờ điều kiện nào?',
+        opts: ['A. Hai khung luôn vuông góc nhau.', 'B. Hai khung luôn trùng nhau (góc 0°).', 'C. Mặt bàn rất nặng.', 'D. Hai cạnh trên cắt nhau và cùng song song với mặt đất.'],
+        ans: 3,
+        exp: 'Theo Vận dụng 1: mỗi khung là hình chữ nhật nên cạnh trên a // a\' và b // b\' (với a\', b\' nằm trên mặt đất), suy ra a, b cùng song song mặt đất và cắt nhau tại trục xoay ⇒ mặt bàn song song mặt đất.'
+      },
+      {
+        type: 'tf',
+        q: 'Xét tính đúng/sai của các mệnh đề sau về hai mặt phẳng (α) và (β):',
+        stmts: [
+          { t: 'a) Nếu (α) // (β) thì mọi đường thẳng nằm trong (α) đều song song với (β).', ans: true, exp: 'Đúng — Đây chính là nội dung Nhận xét ở Mục 1.' },
+          { t: 'b) Nếu (α) chứa hai đường thẳng cắt nhau a, b cùng song song với (β) thì (α) // (β).', ans: true, exp: 'Đúng — Đây chính là Định lí điều kiện để hai mặt phẳng song song.' },
+          { t: 'c) Nếu a ⊂ (α) và a // (β) thì (α) // (β).', ans: false, exp: 'Sai — Chỉ một đường thẳng a // (β) là chưa đủ, (α) vẫn có thể cắt (β) theo giao tuyến c song song với a.' },
+          { t: 'd) Hai mặt phẳng không có điểm chung thì song song với nhau.', ans: true, exp: 'Đúng — Theo Định nghĩa hai mặt phẳng song song.' }
+        ]
+      },
+      {
+        type: 'tf',
+        q: 'Cho tứ diện ABCD. Qua A vẽ hai đường thẳng m // BC và n // BD. Xét các khẳng định sau:',
+        stmts: [
+          { t: 'a) Hai đường thẳng m và n cắt nhau tại A.', ans: true, exp: 'Đúng — Cả m và n cùng đi qua A và lần lượt song song với hai đường thẳng cắt nhau BC, BD nên m, n phân biệt và cắt nhau tại A.' },
+          { t: 'b) Đường thẳng m nằm trong mặt phẳng (BCD).', ans: false, exp: 'Sai — Vì A, B, C, D không đồng phẳng nên A ∉ (BCD), suy ra m ⊄ (BCD).' },
+          { t: 'c) m // (BCD) và n // (BCD).', ans: true, exp: 'Đúng — Vì m // BC ⊂ (BCD), m ⊄ (BCD) nên m // (BCD); tương tự n // (BCD).' },
+          { t: 'd) Mặt phẳng mp(m, n) song song với mặt phẳng (BCD).', ans: true, exp: 'Đúng — mp(m, n) chứa hai đường thẳng cắt nhau m, n cùng song song với (BCD) nên mp(m, n) // (BCD).' }
+        ]
+      }
+    ];
+
+    let qState = { idx: 0, answers: {}, timeLeft: 600, timer: null, name: '', cls: '11A1' };
+    const LB_KEY = 'dhc_toan11_bai13_lb';
+
+    function loadLB() {
+      try { return JSON.parse(localStorage.getItem(LB_KEY) || '[]'); } catch (e) { return []; }
+    }
+    function saveLB(list) {
+      try { localStorage.setItem(LB_KEY, JSON.stringify(list)); } catch (e) {}
+    }
+    function renderLB() {
+      const cls = document.getElementById('stu-class').value.trim() || '11A1';
+      document.getElementById('lb-title').textContent = 'Bảng xếp hạng lớp ' + cls;
+      document.getElementById('lb-title-res').textContent = 'Bảng xếp hạng lớp ' + cls;
+      const list = loadLB().filter(x => x.cls === cls).sort((a, b) => b.score - a.score || a.used - b.used);
+      const html = list.length === 0
+        ? `<tr><td colspan="4" style="color:var(--muted); text-align:center; padding:16px;">Chưa có kết quả nào của lớp <strong>${cls}</strong>.</td></tr>`
+        : list.map((x, i) => `<tr><td><strong>${i + 1}</strong></td><td>${x.name}</td><td><strong>${x.score.toFixed(2)}</strong></td><td>${formatTime(x.used)}</td></tr>`).join('');
+      document.getElementById('lb-body').innerHTML = html;
+      document.getElementById('lb-body-res').innerHTML = html;
+    }
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60), s = sec % 60;
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    document.getElementById('stu-class').addEventListener('input', renderLB);
+
+    function isAnswered(i) {
+      const a = qState.answers[i];
+      if (QUIZ_DATA[i].type === 'mc') return a !== undefined;
+      return a && Object.keys(a).length === 4;
+    }
+
+    function renderQuestion() {
+      const i = qState.idx;
+      const item = QUIZ_DATA[i];
+      document.getElementById('q-header-label').textContent = `Câu ${i + 1}/10`;
+      document.getElementById('q-type-label').textContent = item.type === 'mc' ? 'Trắc nghiệm · 0,75đ' : 'Đúng / Sai · 2,0đ';
+      document.getElementById('q-content').textContent = item.q;
+      const optsEl = document.getElementById('q-options');
+      optsEl.innerHTML = '';
+
+      if (item.type === 'mc') {
+        item.opts.forEach((opt, oi) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt-btn' + (qState.answers[i] === oi ? ' selected' : '');
+          btn.textContent = opt;
+          btn.addEventListener('click', () => {
+            qState.answers[i] = oi;
+            renderQuestion();
+          });
+          optsEl.appendChild(btn);
+        });
+      } else {
+        if (!qState.answers[i]) qState.answers[i] = {};
+        item.stmts.forEach((st, si) => {
+          const row = document.createElement('div');
+          row.className = 'tf-row';
+          const txt = document.createElement('span');
+          txt.textContent = st.t;
+          const grp = document.createElement('div');
+          grp.className = 'tf-btns';
+          [true, false].forEach(val => {
+            const b = document.createElement('button');
+            b.className = 'tf-btn' + (qState.answers[i][si] === val ? ' selected' : '');
+            b.textContent = val ? 'Đúng' : 'Sai';
+            b.addEventListener('click', () => {
+              qState.answers[i][si] = val;
+              renderQuestion();
+            });
+            grp.appendChild(b);
+          });
+          row.appendChild(txt);
+          row.appendChild(grp);
+          optsEl.appendChild(row);
+        });
+      }
+
+      document.getElementById('q-prev').disabled = i === 0;
+      document.getElementById('q-next').disabled = i === QUIZ_DATA.length - 1;
+
+      const grid = document.getElementById('q-nav-grid');
+      grid.innerHTML = '';
+      let count = 0;
+      QUIZ_DATA.forEach((_, qi) => {
+        if (isAnswered(qi)) count++;
+        const b = document.createElement('button');
+        b.className = 'q-num-btn' + (qi === i ? ' current' : (isAnswered(qi) ? ' answered' : ''));
+        b.textContent = qi + 1;
+        b.addEventListener('click', () => { qState.idx = qi; renderQuestion(); });
+        grid.appendChild(b);
+      });
+      document.getElementById('q-answered-count').textContent = `Đã trả lời: ${count}/10`;
+    }
+
+    document.getElementById('q-prev').addEventListener('click', () => { if (qState.idx > 0) { qState.idx--; renderQuestion(); } });
+    document.getElementById('q-next').addEventListener('click', () => { if (qState.idx < 9) { qState.idx++; renderQuestion(); } });
+
+    document.getElementById('btn-start-quiz').addEventListener('click', () => {
+      const name = document.getElementById('stu-name').value.trim();
+      const cls = document.getElementById('stu-class').value.trim() || '11A1';
+      if (!name) {
+        document.getElementById('quiz-err').style.display = 'block';
+        return;
+      }
+      document.getElementById('quiz-err').style.display = 'none';
+      qState = { idx: 0, answers: {}, timeLeft: 600, timer: null, name, cls };
+      document.getElementById('quiz-lobby').style.display = 'none';
+      document.getElementById('quiz-result').style.display = 'none';
+      document.getElementById('quiz-active').style.display = 'grid';
+      const timerEl = document.getElementById('quiz-timer');
+      timerEl.classList.remove('low');
+      timerEl.textContent = '10:00';
+      qState.timer = setInterval(() => {
+        qState.timeLeft--;
+        timerEl.textContent = formatTime(Math.max(0, qState.timeLeft));
+        if (qState.timeLeft <= 60) timerEl.classList.add('low');
+        if (qState.timeLeft <= 0) finishQuiz();
+      }, 1000);
+      renderQuestion();
+    });
+
+    const modal = document.getElementById('submit-modal');
+    document.getElementById('btn-submit-quiz').addEventListener('click', () => {
+      let ansCount = 0;
+      QUIZ_DATA.forEach((_, qi) => { if (isAnswered(qi)) ansCount++; });
+      document.getElementById('modal-msg').textContent = `Bạn đã hoàn thành ${ansCount}/10 câu hỏi. Xác nhận nộp bài ngay?`;
+      modal.classList.add('open');
+    });
+    document.getElementById('modal-cancel').addEventListener('click', () => modal.classList.remove('open'));
+    document.getElementById('modal-confirm').addEventListener('click', () => {
+      modal.classList.remove('open');
+      finishQuiz();
+    });
+
+    function finishQuiz() {
+      if (qState.timer) { clearInterval(qState.timer); qState.timer = null; }
+      let score = 0;
+      let mcRight = 0;
+      const tfPts = [0, 0.2, 0.5, 1.0, 2.0];
+      QUIZ_DATA.forEach((item, i) => {
+        if (item.type === 'mc') {
+          if (qState.answers[i] === item.ans) { score += 0.75; mcRight++; }
+        } else {
+          let r = 0;
+          const a = qState.answers[i] || {};
+          item.stmts.forEach((s, si) => { if (a[si] === s.ans) r++; });
+          score += tfPts[r];
+        }
+      });
+      const used = 600 - Math.max(0, qState.timeLeft);
+      const list = loadLB();
+      list.push({ name: qState.name, cls: qState.cls, score, used });
+      saveLB(list);
+      renderLB();
+
+      document.getElementById('quiz-active').style.display = 'none';
+      document.getElementById('quiz-result').style.display = 'grid';
+      document.getElementById('res-summary').innerHTML = `<strong>${qState.name} (Lớp ${qState.cls})</strong><br/>Tổng điểm: <strong style="font-size:20px;">${score.toFixed(2)} / 10</strong> · Thời gian: ${formatTime(used)} · Đúng ${mcRight}/8 câu trắc nghiệm.`;
+      let detailHtml = '<div style="font-size:14px; font-weight:800; color:var(--text); margin: 12px 0 8px;">Hướng dẫn chữa bài chi tiết</div>';
+      QUIZ_DATA.forEach((item, i) => {
+        if (item.type === 'mc') {
+          const ua = qState.answers[i];
+          const ok = ua === item.ans;
+          const badge = ok
+            ? '<span style="background:var(--teal-light); color:var(--teal-dark); padding:2px 8px; border-radius:999px; font-size:11.5px; font-weight:700;">✓ Đúng (+0,75đ)</span>'
+            : '<span style="background:var(--pink-bg); color:var(--pink); padding:2px 8px; border-radius:999px; font-size:11.5px; font-weight:700;">✗ Sai (0đ)</span>';
+          const userTxt = ua !== undefined ? item.opts[ua] : '<em>Chưa chọn</em>';
+          detailHtml += `
+            <div class="box" style="margin-bottom:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+                <strong>Câu ${i + 1}</strong> ${badge}
+              </div>
+              <div style="font-size:13px; font-weight:600; margin-bottom:6px;">${item.q}</div>
+              <div style="font-size:12.5px; color:#334155; margin-bottom:4px;">• Bạn chọn: ${userTxt}</div>
+              <div style="font-size:12.5px; color:var(--teal-dark); font-weight:600; margin-bottom:6px;">• Đáp án đúng: ${item.opts[item.ans]}</div>
+              <div style="font-size:12.5px; color:#475569; background:#f8fafc; padding:7px 10px; border-left:3px solid var(--teal-border); border-radius:0 6px 6px 0;">
+                <strong>Giải thích:</strong> ${item.exp}
+              </div>
+            </div>`;
+        } else {
+          const ua = qState.answers[i] || {};
+          let rCount = 0;
+          item.stmts.forEach((s, si) => { if (ua[si] === s.ans) rCount++; });
+          const pts = tfPts[rCount];
+          const badge = rCount === 4
+            ? `<span style="background:var(--teal-light); color:var(--teal-dark); padding:2px 8px; border-radius:999px; font-size:11.5px; font-weight:700;">✓ Đúng 4/4 (+${pts}đ)</span>`
+            : `<span style="background:var(--pink-bg); color:var(--pink); padding:2px 8px; border-radius:999px; font-size:11.5px; font-weight:700;">Đúng ${rCount}/4 (+${pts}đ)</span>`;
+          let rows = '';
+          item.stmts.forEach((s, si) => {
+            const uVal = ua[si];
+            const ok = uVal === s.ans;
+            const uStr = uVal === true ? 'Đúng' : (uVal === false ? 'Sai' : 'Chưa chọn');
+            rows += `
+              <div style="font-size:12.5px; padding:6px 8px; border-radius:6px; background:${ok ? '#f0fdfa' : '#fff1f2'}; margin-bottom:6px;">
+                <div style="font-weight:600; color:#1e293b;">${s.t}</div>
+                <div style="color:${ok ? 'var(--teal-dark)' : 'var(--pink)'}; margin-top:2px;">
+                  Bạn chọn: <strong>${uStr}</strong> · Đáp án: <strong>${s.ans ? 'Đúng' : 'Sai'}</strong>
+                </div>
+                <div style="color:#475569; margin-top:2px;"><em>${s.exp}</em></div>
+              </div>`;
+          });
+          detailHtml += `
+            <div class="box" style="margin-bottom:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+                <strong>Câu ${i + 1} (Đúng / Sai)</strong> ${badge}
+              </div>
+              <div style="font-size:13px; font-weight:600; margin-bottom:8px;">${item.q}</div>
+              ${rows}
+            </div>`;
+        }
+      });
+      document.getElementById('res-breakdown').innerHTML = detailHtml;
+    }
+
+    document.getElementById('btn-retry-quiz').addEventListener('click', () => {
+      document.getElementById('quiz-result').style.display = 'none';
+      document.getElementById('quiz-lobby').style.display = 'grid';
+    });
+
+    renderLB();
+  </script>
+</body>
+</html>
